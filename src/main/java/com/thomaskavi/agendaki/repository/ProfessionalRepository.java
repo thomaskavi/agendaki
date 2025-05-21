@@ -1,6 +1,7 @@
 package com.thomaskavi.agendaki.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,4 +21,6 @@ public interface ProfessionalRepository extends JpaRepository<Professional, Long
           WHERE p.email = :email
       """)
   List<ProfessionalDetailsProjection> searchProfessionalAndRolesByEmail(String email);
+
+  Optional<Professional> findByEmail(String email);
 }

@@ -1,5 +1,6 @@
 package com.thomaskavi.agendaki.entities;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -58,7 +59,7 @@ public class Professional implements UserDetails {
   @OneToMany(mappedBy = "professional", cascade = CascadeType.ALL, orphanRemoval = true)
   @Setter(AccessLevel.NONE)
   @ToString.Exclude
-  private List<Client> clients;
+  private List<Client> clients = new ArrayList<>();
 
   @ManyToMany
   @JoinTable(name = "tb_professional_role", joinColumns = @JoinColumn(name = "professional_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))

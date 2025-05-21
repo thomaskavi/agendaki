@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,12 +28,14 @@ public class ClientController {
   @Autowired
   private ClientService service;
 
+  @PreAuthorize("hasAnyRole('ROLE_PROFESSIONAL', 'ROLE_ADMIN')")
   @GetMapping
   public ResponseEntity<List<ClientDTO>> findAll() {
     List<ClientDTO> list = service.findAll();
     return ResponseEntity.ok(list);
   }
 
+  @PreAuthorize("hasAnyRole('ROLE_PROFESSIONAL', 'ROLE_ADMIN')")
   @GetMapping(value = "/{id}")
   public ResponseEntity<ClientDTO> findById(@PathVariable Long id) {
     ClientDTO dto = service.findById(id);
@@ -53,6 +56,7 @@ public class ClientController {
     return ResponseEntity.ok(dto);
   }
 
+  @PreAuthorize("hasAnyRole('ROLE_PROFESSIONAL', 'ROLE_ADMIN')")
   @DeleteMapping(value = "/{id}")
   public ResponseEntity<Void> delete(@PathVariable Long id) {
     service.delete(id);

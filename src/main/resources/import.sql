@@ -2,8 +2,8 @@ INSERT INTO tb_role (authority) VALUES ('ROLE_PROFESSIONAL');
 INSERT INTO tb_role (authority) VALUES ('ROLE_ADMIN');
 
 -- PROFESSIONALS
-INSERT INTO tb_professional (name, email, password, slug, profession, phone, profile_image_url) VALUES ('Maria Brown', 'maria@barbearia.com', '$2a$10$eACCYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORUYzfMQCbVBIhZ8tG', 'almariaice-brown', 'Cabeleireira', '11988887771', 'https://img.com/alice.jpg');
-INSERT INTO tb_professional (name, email, password, slug, profession, phone, profile_image_url) VALUES ('Alex Green', 'alex@barbearia.com', '$2a$10$eACCYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORUYzfMQCbVBIhZ8tG', 'alex-green', 'Barbeiro', '11988887772', 'https://img.com/bruno.jpg');
+INSERT INTO tb_professional (name, email, password, slug, profession, phone, profile_image_url) VALUES ('Maria Brown', 'maria@gmail.com', '$2a$10$eACCYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORUYzfMQCbVBIhZ8tG', 'almariaice-brown', 'Cabeleireira', '11988887771', 'https://img.com/alice.jpg');
+INSERT INTO tb_professional (name, email, password, slug, profession, phone, profile_image_url) VALUES ('Alex Green', 'alex@gmail.com', '$2a$10$eACCYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORUYzfMQCbVBIhZ8tG', 'alex-green', 'Barbeiro', '11988887772', 'https://img.com/bruno.jpg');
 INSERT INTO tb_professional (name, email, password, slug, profession, phone, profile_image_url) VALUES ('SUPER ADMIN', 'admin@barbearia.com', '$2a$10$eACCYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORUYzfMQCbVBIhZ8tG', 'super-admin', 'Admin', '11988887773', 'https://img.com/carla.jpg');
 INSERT INTO tb_professional (name, email, password, slug, profession, phone, profile_image_url) VALUES ('Diego Rocha', 'diego@barbearia.com', 'senha123', 'diego-rocha', 'Barbeiro', '11988887774', 'https://img.com/diego.jpg');
 INSERT INTO tb_professional (name, email, password, slug, profession, phone, profile_image_url) VALUES ('Eduarda Reis', 'eduarda@barbearia.com', 'senha123', 'eduarda-reis', 'Esteticista', '11988887775', 'https://img.com/eduarda.jpg');

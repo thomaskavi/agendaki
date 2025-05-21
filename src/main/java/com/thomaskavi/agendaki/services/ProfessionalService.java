@@ -4,14 +4,18 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.thomaskavi.agendaki.dto.ProfessionalDTO;
+import com.thomaskavi.agendaki.dto.ProfessionalSummaryDTO;
 import com.thomaskavi.agendaki.entities.Professional;
 import com.thomaskavi.agendaki.entities.Role;
 import com.thomaskavi.agendaki.projections.ProfessionalDetailsProjection;
@@ -27,16 +31,20 @@ public class ProfessionalService implements UserDetailsService {
   @Autowired
   private ProfessionalRepository repository;
 
+  @Autowired
+  private AuthService authService;
+
   @Transactional(readOnly = true)
-  public List<ProfessionalDTO> findAll() {
+  public List<ProfessionalSummaryDTO> findAll() {
     List<Professional> result = repository.findAll();
-    return result.stream().map(x -> new ProfessionalDTO(x)).toList();
+    return result.stream().map(x -> new ProfessionalSummaryDTO(x)).toList();
   }
 
   @Transactional(readOnly = true)
   public ProfessionalDTO findById(Long id) {
     Professional professional = repository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Profissional não encontrado"));
+    authService.validateSelfOrAdmin(id);
     return new ProfessionalDTO(professional);
   }
 
@@ -99,6 +107,24 @@ public class ProfessionalService implements UserDetailsService {
     }
 
     return professional;
+  }
+
+  protected Professional authenticated() {
+    try {
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      Jwt jwtPrincipal = (Jwt) authentication.getPrincipal();
+      String username = jwtPrincipal.getClaim("username");
+      return repository.findByEmail(username).get();
+    } catch (Exception e) {
+      throw new UsernameNotFoundException("Email not found");
+    }
+
+  }
+
+  @Transactional(readOnly = true)
+  public ProfessionalDTO getMe() {
+    Professional professional = authenticated();
+    return new ProfessionalDTO(professional);
   }
 
 }

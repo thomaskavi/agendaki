@@ -1,5 +1,10 @@
 package com.thomaskavi.agendaki.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+
 import com.thomaskavi.agendaki.entities.Professional;
 
 import jakarta.validation.constraints.Email;
@@ -25,6 +30,8 @@ public class ProfessionalDTO {
   private String phone;
   private String profileImageUrl;
 
+  private List<String> roles = new ArrayList<>();
+
   public ProfessionalDTO() {
   }
 
@@ -37,69 +44,44 @@ public class ProfessionalDTO {
     this.profession = entity.getProfession();
     this.phone = entity.getPhone();
     this.profileImageUrl = entity.getProfileImageUrl();
+    for (GrantedAuthority role : entity.getRoles()) {
+      roles.add(role.getAuthority());
+    }
   }
 
   public Long getId() {
     return id;
   }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
-
   public String getName() {
     return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
   }
 
   public String getEmail() {
     return email;
   }
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
   public String getPassword() {
     return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
   }
 
   public String getSlug() {
     return slug;
   }
 
-  public void setSlug(String slug) {
-    this.slug = slug;
-  }
-
   public String getProfession() {
     return profession;
-  }
-
-  public void setProfession(String profession) {
-    this.profession = profession;
   }
 
   public String getPhone() {
     return phone;
   }
 
-  public void setPhone(String phone) {
-    this.phone = phone;
-  }
-
   public String getProfileImageUrl() {
     return profileImageUrl;
   }
 
-  public void setProfileImageUrl(String profileImageUrl) {
-    this.profileImageUrl = profileImageUrl;
+  public List<String> getRoles() {
+    return roles;
   }
 }
