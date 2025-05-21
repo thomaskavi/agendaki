@@ -1,9 +1,17 @@
+INSERT INTO tb_role (authority) VALUES ('ROLE_PROFESSIONAL');
+INSERT INTO tb_role (authority) VALUES ('ROLE_ADMIN');
+
 -- PROFESSIONALS
-INSERT INTO tb_professional (name, email, password, slug, profession, phone, profile_image_url) VALUES ('Alice Souza', 'alice@barbearia.com', 'senha123', 'alice-souza', 'Cabeleireira', '11988887771', 'https://img.com/alice.jpg');
-INSERT INTO tb_professional (name, email, password, slug, profession, phone, profile_image_url) VALUES ('Bruno Lima', 'bruno@barbearia.com', 'senha123', 'bruno-lima', 'Barbeiro', '11988887772', 'https://img.com/bruno.jpg');
-INSERT INTO tb_professional (name, email, password, slug, profession, phone, profile_image_url) VALUES ('Carla Mendes', 'carla@barbearia.com', 'senha123', 'carla-mendes', 'Manicure', '11988887773', 'https://img.com/carla.jpg');
+INSERT INTO tb_professional (name, email, password, slug, profession, phone, profile_image_url) VALUES ('Maria Brown', 'maria@barbearia.com', '$2a$10$eACCYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORUYzfMQCbVBIhZ8tG', 'almariaice-brown', 'Cabeleireira', '11988887771', 'https://img.com/alice.jpg');
+INSERT INTO tb_professional (name, email, password, slug, profession, phone, profile_image_url) VALUES ('Alex Green', 'alex@barbearia.com', '$2a$10$eACCYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORUYzfMQCbVBIhZ8tG', 'alex-green', 'Barbeiro', '11988887772', 'https://img.com/bruno.jpg');
+INSERT INTO tb_professional (name, email, password, slug, profession, phone, profile_image_url) VALUES ('SUPER ADMIN', 'admin@barbearia.com', '$2a$10$eACCYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORUYzfMQCbVBIhZ8tG', 'super-admin', 'Admin', '11988887773', 'https://img.com/carla.jpg');
 INSERT INTO tb_professional (name, email, password, slug, profession, phone, profile_image_url) VALUES ('Diego Rocha', 'diego@barbearia.com', 'senha123', 'diego-rocha', 'Barbeiro', '11988887774', 'https://img.com/diego.jpg');
 INSERT INTO tb_professional (name, email, password, slug, profession, phone, profile_image_url) VALUES ('Eduarda Reis', 'eduarda@barbearia.com', 'senha123', 'eduarda-reis', 'Esteticista', '11988887775', 'https://img.com/eduarda.jpg');
+
+INSERT INTO tb_user_role (professional_id, role_id) VALUES (2, 1);
+INSERT INTO tb_user_role (professional_id, role_id) VALUES (3, 2);
+INSERT INTO tb_user_role (professional_id, role_id) VALUES (1, 1);
+
 
 -- SERVICES OFFERED
 INSERT INTO tb_service_offered (name, description, price, duration_in_minutes, professional_id) VALUES ('Corte Feminino', 'Corte moderno e personalizado', 70.0, 45, 1);
