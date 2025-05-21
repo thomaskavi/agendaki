@@ -4,12 +4,17 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.thomaskavi.agendaki.dto.ProfessionalDTO;
 import com.thomaskavi.agendaki.entities.Professional;
+import com.thomaskavi.agendaki.entities.Role;
+import com.thomaskavi.agendaki.projections.ProfessionalDetailsProjection;
 import com.thomaskavi.agendaki.repository.ProfessionalRepository;
 import com.thomaskavi.agendaki.services.exceptions.DatabaseException;
 import com.thomaskavi.agendaki.services.exceptions.ResourceNotFoundException;
@@ -17,7 +22,7 @@ import com.thomaskavi.agendaki.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
-public class ProfessionalService {
+public class ProfessionalService implements UserDetailsService {
 
   @Autowired
   private ProfessionalRepository repository;
@@ -77,6 +82,23 @@ public class ProfessionalService {
     entity.setProfileImageUrl(dto.getProfileImageUrl());
     // Não copia serviços nem clientes aqui (associação controlada por endpoints
     // específicos)
+  }
+
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    List<ProfessionalDetailsProjection> result = repository.searchProfessionalAndRolesByEmail(username);
+    if (result.size() == 0) {
+      throw new UsernameNotFoundException("Email not found");
+    }
+
+    Professional professional = new Professional();
+    professional.setEmail(result.get(0).getUsername());
+    professional.setPassword(result.get(0).getPassword());
+    for (ProfessionalDetailsProjection projection : result) {
+      professional.addRole(new Role(projection.getRoleId(), projection.getAuthority()));
+    }
+
+    return professional;
   }
 
 }

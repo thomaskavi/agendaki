@@ -8,9 +8,10 @@ INSERT INTO tb_professional (name, email, password, slug, profession, phone, pro
 INSERT INTO tb_professional (name, email, password, slug, profession, phone, profile_image_url) VALUES ('Diego Rocha', 'diego@barbearia.com', 'senha123', 'diego-rocha', 'Barbeiro', '11988887774', 'https://img.com/diego.jpg');
 INSERT INTO tb_professional (name, email, password, slug, profession, phone, profile_image_url) VALUES ('Eduarda Reis', 'eduarda@barbearia.com', 'senha123', 'eduarda-reis', 'Esteticista', '11988887775', 'https://img.com/eduarda.jpg');
 
-INSERT INTO tb_user_role (professional_id, role_id) VALUES (2, 1);
-INSERT INTO tb_user_role (professional_id, role_id) VALUES (3, 2);
-INSERT INTO tb_user_role (professional_id, role_id) VALUES (1, 1);
+
+INSERT INTO tb_professional_role (professional_id, role_id) VALUES (2, 1); -- Alex: ROLE_PROFESSIONAL
+INSERT INTO tb_professional_role (professional_id, role_id) VALUES (3, 2); -- Admin: ROLE_ADMIN
+INSERT INTO tb_professional_role (professional_id, role_id) VALUES (1, 1); -- Maria: ROLE_PROFESSIONAL
 
 
 -- SERVICES OFFERED

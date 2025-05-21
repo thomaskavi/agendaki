@@ -61,7 +61,7 @@ public class Professional implements UserDetails {
   private List<Client> clients;
 
   @ManyToMany
-  @JoinTable(name = "tb_user_role", joinColumns = @JoinColumn(name = "professional_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+  @JoinTable(name = "tb_professional_role", joinColumns = @JoinColumn(name = "professional_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
 
   public void addRole(Role role) {
