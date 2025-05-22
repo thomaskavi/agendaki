@@ -1,7 +1,13 @@
 package com.thomaskavi.agendaki.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+
 import com.thomaskavi.agendaki.entities.Client;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
@@ -12,13 +18,14 @@ public class ClientDTO {
   @NotBlank(message = "Nome é obrigatório")
   private String name;
 
+  @Column(unique = true)
   @Email(message = "Email inválido")
   @NotBlank(message = "Email é obrigatório")
   private String email;
 
   private String phone;
 
-  private Long professionalId;
+  private List<String> roles = new ArrayList<>();
 
   public ClientDTO() {
   }
@@ -28,8 +35,12 @@ public class ClientDTO {
     this.name = entity.getName();
     this.email = entity.getEmail();
     this.phone = entity.getPhone();
-    this.professionalId = entity.getProfessional() != null ? entity.getProfessional().getId() : null;
+    for (GrantedAuthority role : entity.getRoles()) {
+      roles.add(role.getAuthority());
+    }
   }
+
+  // Getters e setters
 
   public Long getId() {
     return id;
@@ -63,11 +74,7 @@ public class ClientDTO {
     this.phone = phone;
   }
 
-  public Long getProfessionalId() {
-    return professionalId;
-  }
-
-  public void setProfessionalId(Long professionalId) {
-    this.professionalId = professionalId;
+  public List<String> getRoles() {
+    return roles;
   }
 }

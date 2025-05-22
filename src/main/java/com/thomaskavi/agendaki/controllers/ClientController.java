@@ -42,6 +42,7 @@ public class ClientController {
     return ResponseEntity.ok(dto);
   }
 
+  @PreAuthorize("hasAnyRole('ROLE_CLIENT', 'ROLE_ADMIN')")
   @PostMapping
   public ResponseEntity<ClientDTO> insert(@Valid @RequestBody ClientDTO dto) {
     dto = service.insert(dto);
@@ -50,16 +51,24 @@ public class ClientController {
     return ResponseEntity.created(uri).body(dto);
   }
 
+  @PreAuthorize("hasAnyRole('ROLE_CLIENT', 'ROLE_ADMIN')")
   @PutMapping(value = "/{id}")
   public ResponseEntity<ClientDTO> update(@PathVariable Long id, @Valid @RequestBody ClientDTO dto) {
     dto = service.update(id, dto);
     return ResponseEntity.ok(dto);
   }
 
-  @PreAuthorize("hasAnyRole('ROLE_PROFESSIONAL', 'ROLE_ADMIN')")
+  @PreAuthorize("hasAnyRole('ROLE_CLIENT', 'ROLE_ADMIN')")
   @DeleteMapping(value = "/{id}")
   public ResponseEntity<Void> delete(@PathVariable Long id) {
     service.delete(id);
     return ResponseEntity.noContent().build();
+  }
+
+  @PreAuthorize("hasAnyRole('ROLE_CLIENT', 'ROLE_ADMIN')")
+  @GetMapping(value = "/me")
+  public ResponseEntity<ClientDTO> getMe() {
+    ClientDTO dto = service.getMe();
+    return ResponseEntity.ok(dto);
   }
 }
