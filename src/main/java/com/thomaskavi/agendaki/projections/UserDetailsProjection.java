@@ -1,6 +1,6 @@
 package com.thomaskavi.agendaki.projections;
 
-public interface ClientDetailsProjection {
+public interface UserDetailsProjection {
 
   String getUsername();
 

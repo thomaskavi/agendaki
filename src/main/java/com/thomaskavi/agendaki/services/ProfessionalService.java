@@ -46,10 +46,14 @@ public class ProfessionalService {
 
   @Transactional
   public ProfessionalDTO insert(ProfessionalDTO dto) {
-    Professional entity = new Professional();
-    copyDtoToEntity(dto, entity);
-    entity = repository.save(entity);
-    return new ProfessionalDTO(entity);
+    if (repository.findByEmail(dto.getEmail()).isPresent()) {
+      throw new DatabaseException("Email já está em uso");
+    } else {
+      Professional entity = new Professional();
+      copyDtoToEntity(dto, entity);
+      entity = repository.save(entity);
+      return new ProfessionalDTO(entity);
+    }
   }
 
   @Transactional

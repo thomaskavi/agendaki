@@ -1,5 +1,6 @@
 package com.thomaskavi.agendaki.entities;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -7,46 +8,55 @@ import java.util.Set;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "tb_client")
+@Table(name = "tb_user")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Client implements UserDetails {
+@Inheritance(strategy = InheritanceType.JOINED)
+public class User implements UserDetails {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   private String name;
+
+  @Column(unique = true)
   private String email;
-  private String password;
+
   private String phone;
 
-  @ManyToOne
-  @JoinColumn(name = "professional_id", nullable = true)
-  private Professional professional;
+  private LocalDate birthDate;
+
+  private String password;
 
   @ManyToMany(fetch = FetchType.EAGER)
-  @JoinTable(name = "tb_client_role", joinColumns = @JoinColumn(name = "client_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+  @JoinTable(name = "tb_user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
 
   public void addRole(Role role) {
     roles.add(role);
+  }
+
+  public boolean hasRole(String roleName) {
+    return roles.stream().anyMatch(role -> role.getAuthority().equals(roleName));
   }
 
   @Override
@@ -54,18 +64,28 @@ public class Client implements UserDetails {
     return roles;
   }
 
-  public boolean hasRole(String roleName) {
-    for (Role role : roles) {
-      if (role.getAuthority().equals(roleName)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   @Override
   public String getUsername() {
     return email;
   }
 
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return true;
+  }
 }

@@ -13,20 +13,12 @@ public class ProfessionalSummaryDTO {
   public ProfessionalSummaryDTO() {
   }
 
-  public ProfessionalSummaryDTO(Long id, String name, String email, String profession, String profileImageUrl) {
-    this.id = id;
-    this.name = name;
-    this.email = email;
-    this.profession = profession;
-    this.profileImageUrl = profileImageUrl;
-  }
-
   public ProfessionalSummaryDTO(Professional entity) {
-    id = entity.getId();
-    name = entity.getName();
-    email = entity.getEmail();
-    profession = entity.getProfession();
-    profileImageUrl = entity.getProfileImageUrl();
+    this.id = entity.getId();
+    this.name = entity.getName();
+    this.email = entity.getEmail();
+    this.profession = entity.getProfession();
+    this.profileImageUrl = entity.getProfileImageUrl();
   }
 
   public Long getId() {
@@ -48,5 +40,4 @@ public class ProfessionalSummaryDTO {
   public String getProfileImageUrl() {
     return profileImageUrl;
   }
-
 }

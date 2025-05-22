@@ -1,25 +1,11 @@
 package com.thomaskavi.agendaki.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.security.core.GrantedAuthority;
-
 import com.thomaskavi.agendaki.entities.Professional;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public class ProfessionalDTO {
-  private Long id;
-
-  @NotBlank(message = "Nome é obrigatório")
-  private String name;
-
-  @Email(message = "Email inválido")
-  @NotBlank(message = "Email é obrigatório")
-  private String email;
+public class ProfessionalDTO extends UserDTO {
 
   @NotBlank(message = "Senha é obrigatória")
   @Size(min = 6, message = "A senha deve ter no mínimo 6 caracteres")
@@ -27,38 +13,18 @@ public class ProfessionalDTO {
 
   private String slug;
   private String profession;
-  private String phone;
   private String profileImageUrl;
 
-  private List<String> roles = new ArrayList<>();
-
   public ProfessionalDTO() {
+    super();
   }
 
   public ProfessionalDTO(Professional entity) {
-    this.id = entity.getId();
-    this.name = entity.getName();
-    this.email = entity.getEmail();
+    super(entity); // Pega id, name, email, phone, roles do User
     this.password = entity.getPassword();
     this.slug = entity.getSlug();
     this.profession = entity.getProfession();
-    this.phone = entity.getPhone();
     this.profileImageUrl = entity.getProfileImageUrl();
-    for (GrantedAuthority role : entity.getRoles()) {
-      roles.add(role.getAuthority());
-    }
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public String getEmail() {
-    return email;
   }
 
   public String getPassword() {
@@ -73,15 +39,23 @@ public class ProfessionalDTO {
     return profession;
   }
 
-  public String getPhone() {
-    return phone;
-  }
-
   public String getProfileImageUrl() {
     return profileImageUrl;
   }
 
-  public List<String> getRoles() {
-    return roles;
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  public void setSlug(String slug) {
+    this.slug = slug;
+  }
+
+  public void setProfession(String profession) {
+    this.profession = profession;
+  }
+
+  public void setProfileImageUrl(String profileImageUrl) {
+    this.profileImageUrl = profileImageUrl;
   }
 }

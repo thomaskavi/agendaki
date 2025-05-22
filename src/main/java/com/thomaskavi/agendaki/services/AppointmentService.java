@@ -11,11 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.thomaskavi.agendaki.dto.AppointmentDTO;
 import com.thomaskavi.agendaki.dto.UpdateAppointmentDTO;
 import com.thomaskavi.agendaki.entities.Appointment;
-import com.thomaskavi.agendaki.entities.Client;
 import com.thomaskavi.agendaki.entities.ServiceOffered;
+import com.thomaskavi.agendaki.entities.User;
 import com.thomaskavi.agendaki.repository.AppointmentRepository;
-import com.thomaskavi.agendaki.repository.ClientRepository;
 import com.thomaskavi.agendaki.repository.ServiceOfferedRepository;
+import com.thomaskavi.agendaki.repository.UserRepository;
 import com.thomaskavi.agendaki.services.exceptions.DatabaseException;
 import com.thomaskavi.agendaki.services.exceptions.ResourceNotFoundException;
 
@@ -25,10 +25,10 @@ import jakarta.persistence.EntityNotFoundException;
 public class AppointmentService {
 
   @Autowired
-  private AppointmentRepository repository;
+  private UserRepository userRepository;
 
   @Autowired
-  private ClientRepository clientRepository;
+  private AppointmentRepository repository;
 
   @Autowired
   private ServiceOfferedRepository serviceOfferedRepository;
@@ -65,9 +65,6 @@ public class AppointmentService {
       ServiceOffered service = serviceOfferedRepository.findById(dto.getServiceOfferedId())
           .orElseThrow(() -> new ResourceNotFoundException("Serviço não encontrado"));
       entity.setService(service);
-
-      entity.setProfessional(service.getProfessional());
-
       entity = repository.save(entity);
       return new AppointmentDTO(entity);
     } catch (EntityNotFoundException e) {
@@ -90,15 +87,18 @@ public class AppointmentService {
   private void copyDtoToEntity(AppointmentDTO dto, Appointment entity) {
     entity.setDateTime(dto.getDateTime());
 
-    Client client = clientRepository.findById(dto.getClientId())
+    User client = userRepository.findById(dto.getClientId())
         .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado"));
+
+    if (!client.hasRole("ROLE_CLIENT")) {
+      throw new DatabaseException("Usuário informado não é um cliente válido");
+    }
+
     entity.setClient(client);
 
     ServiceOffered service = serviceOfferedRepository.findById(dto.getServiceOfferedId())
         .orElseThrow(() -> new ResourceNotFoundException("Serviço não encontrado"));
     entity.setService(service);
-
-    entity.setProfessional(service.getProfessional());
   }
 
 }
