@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.thomaskavi.agendaki.dto.ProfessionalDTO;
-import com.thomaskavi.agendaki.dto.ProfessionalSummaryDTO;
+import com.thomaskavi.agendaki.dto.ProfessionalDetailsDTO;
 import com.thomaskavi.agendaki.entities.Professional;
 import com.thomaskavi.agendaki.repository.ProfessionalRepository;
 import com.thomaskavi.agendaki.services.exceptions.DatabaseException;
@@ -31,17 +31,16 @@ public class ProfessionalService {
   private AuthService authService;
 
   @Transactional(readOnly = true)
-  public List<ProfessionalSummaryDTO> findAll() {
+  public List<ProfessionalDetailsDTO> findAll() {
     List<Professional> result = repository.findAll();
-    return result.stream().map(x -> new ProfessionalSummaryDTO(x)).toList();
+    return result.stream().map(x -> new ProfessionalDetailsDTO(x)).toList();
   }
 
   @Transactional(readOnly = true)
-  public ProfessionalDTO findById(Long id) {
+  public ProfessionalDetailsDTO findById(Long id) {
     Professional professional = repository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Profissional não encontrado"));
-    authService.validateSelfOrAdmin(id);
-    return new ProfessionalDTO(professional);
+    return new ProfessionalDetailsDTO(professional);
   }
 
   @Transactional
@@ -58,6 +57,9 @@ public class ProfessionalService {
 
   @Transactional
   public ProfessionalDTO update(Long id, ProfessionalDTO dto) {
+    // Só deixa atualizar se for o próprio profissional ou admin
+    authService.validateSelfOrAdmin(id);
+
     try {
       Professional entity = repository.getReferenceById(id);
       copyDtoToEntity(dto, entity);
@@ -70,6 +72,9 @@ public class ProfessionalService {
 
   @Transactional(propagation = Propagation.SUPPORTS)
   public void delete(Long id) {
+    // Só deixa deletar se for admin (exemplo)
+    authService.validateAdmin();
+
     if (!repository.existsById(id)) {
       throw new ResourceNotFoundException("Profissional não encontrado");
     }
@@ -107,5 +112,4 @@ public class ProfessionalService {
     Professional professional = authenticated();
     return new ProfessionalDTO(professional);
   }
-
 }

@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -40,10 +39,16 @@ public class ResourceServerConfig {
   @Order(3)
   SecurityFilterChain rsSecurityFilterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable());
-    http.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
-    http.oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(Customizer.withDefaults()));
-    // Configuração CORS centralizada
+
+    http.authorizeHttpRequests(authorize -> authorize
+        .requestMatchers("/auth/**").permitAll()
+        .anyRequest().authenticated());
+
+    http.oauth2ResourceServer(
+        oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));
+
     http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
+
     return http.build();
   }
 
@@ -51,7 +56,7 @@ public class ResourceServerConfig {
   JwtAuthenticationConverter jwtAuthenticationConverter() {
     JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
     grantedAuthoritiesConverter.setAuthoritiesClaimName("authorities");
-    grantedAuthoritiesConverter.setAuthorityPrefix("");
+    grantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
     JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
     jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
     return jwtAuthenticationConverter;

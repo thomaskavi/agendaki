@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.thomaskavi.agendaki.dto.ProfessionalDTO;
-import com.thomaskavi.agendaki.dto.ProfessionalSummaryDTO;
+import com.thomaskavi.agendaki.dto.ProfessionalDetailsDTO;
 import com.thomaskavi.agendaki.services.ProfessionalService;
 
 import jakarta.validation.Valid;
@@ -29,20 +29,22 @@ public class ProfessionalController {
   @Autowired
   private ProfessionalService service;
 
+  @PreAuthorize("isAuthenticated()")
   @GetMapping
-  public ResponseEntity<List<ProfessionalSummaryDTO>> findAll() {
-    List<ProfessionalSummaryDTO> list = service.findAll();
+  public ResponseEntity<List<ProfessionalDetailsDTO>> findAll() {
+    List<ProfessionalDetailsDTO> list = service.findAll();
     return ResponseEntity.ok(list);
   }
 
-  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSIONAL')")
+  @PreAuthorize("isAuthenticated()")
   @GetMapping(value = "/{id}")
-  public ResponseEntity<ProfessionalDTO> findById(@PathVariable Long id) {
-    ProfessionalDTO dto = service.findById(id);
+  public ResponseEntity<ProfessionalDetailsDTO> findById(@PathVariable Long id) {
+    ProfessionalDetailsDTO dto = service.findById(id);
     return ResponseEntity.ok(dto);
   }
 
-  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSIONAL')")
+  // Inserção pode ser permitida para admins e profissionais
+  @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSIONAL')")
   @PostMapping
   public ResponseEntity<ProfessionalDTO> insert(@Valid @RequestBody ProfessionalDTO dto) {
     dto = service.insert(dto);
@@ -51,24 +53,19 @@ public class ProfessionalController {
     return ResponseEntity.created(uri).body(dto);
   }
 
-  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSIONAL')")
+  // Update: validado via service para só profissional dono ou admin
+  @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSIONAL')")
   @PutMapping(value = "/{id}")
   public ResponseEntity<ProfessionalDTO> update(@PathVariable Long id, @Valid @RequestBody ProfessionalDTO dto) {
     dto = service.update(id, dto);
     return ResponseEntity.ok(dto);
   }
 
-  @PreAuthorize("hasAnyRole('ROLE_PROFESSIONAL')")
+  // Delete: só admin pode deletar (validado no service)
+  @PreAuthorize("hasRole('ADMIN')")
   @DeleteMapping(value = "/{id}")
   public ResponseEntity<Void> delete(@PathVariable Long id) {
     service.delete(id);
     return ResponseEntity.noContent().build();
-  }
-
-  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSIONAL')")
-  @GetMapping(value = "/me")
-  public ResponseEntity<ProfessionalDTO> getMe() {
-    ProfessionalDTO dto = service.getMe();
-    return ResponseEntity.ok(dto);
   }
 }
