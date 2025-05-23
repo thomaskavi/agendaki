@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.thomaskavi.agendaki.dto.ProfessionalDTO;
 import com.thomaskavi.agendaki.dto.ProfessionalDetailsDTO;
+import com.thomaskavi.agendaki.dto.ProfessionalPublicDTO;
 import com.thomaskavi.agendaki.entities.Professional;
 import com.thomaskavi.agendaki.repository.ProfessionalRepository;
 import com.thomaskavi.agendaki.services.exceptions.DatabaseException;
@@ -111,5 +112,11 @@ public class ProfessionalService {
   public ProfessionalDTO getMe() {
     Professional professional = authenticated();
     return new ProfessionalDTO(professional);
+  }
+
+  public ProfessionalPublicDTO findBySlug(String slug) {
+    Professional professional = repository.findBySlug(slug)
+        .orElseThrow(() -> new ResourceNotFoundException("Profissional não encontrado"));
+    return new ProfessionalPublicDTO(professional);
   }
 }

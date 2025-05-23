@@ -15,6 +15,8 @@ public class ServiceOfferedDTO {
   @NotNull(message = "O preço é obrigatório")
   private Double price;
 
+  private Integer durationInMinutes;
+
   @NotNull(message = "O ID do profissional é obrigatório")
   private Long professionalId;
 
@@ -25,6 +27,7 @@ public class ServiceOfferedDTO {
     this.id = entity.getId();
     this.name = entity.getName();
     this.price = entity.getPrice();
+    this.durationInMinutes = entity.getDurationInMinutes();
     this.professionalId = entity.getProfessional() != null ? entity.getProfessional().getId() : null;
   }
 
@@ -58,6 +61,14 @@ public class ServiceOfferedDTO {
 
   public void setProfessionalId(Long professionalId) {
     this.professionalId = professionalId;
+  }
+
+  public Integer getDurationInMinutes() {
+    return durationInMinutes;
+  }
+
+  public void setDurationInMinutes(Integer durationInMinutes) {
+    this.durationInMinutes = durationInMinutes;
   }
 
 }

@@ -18,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.thomaskavi.agendaki.dto.ProfessionalDTO;
 import com.thomaskavi.agendaki.dto.ProfessionalDetailsDTO;
+import com.thomaskavi.agendaki.dto.ProfessionalPublicDTO;
 import com.thomaskavi.agendaki.services.ProfessionalService;
 
 import jakarta.validation.Valid;
@@ -29,22 +30,22 @@ public class ProfessionalController {
   @Autowired
   private ProfessionalService service;
 
-  @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
   @GetMapping
   public ResponseEntity<List<ProfessionalDetailsDTO>> findAll() {
     List<ProfessionalDetailsDTO> list = service.findAll();
     return ResponseEntity.ok(list);
   }
 
-  @PreAuthorize("isAuthenticated()")
-  @GetMapping(value = "/{id}")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+  @GetMapping("/{id}")
   public ResponseEntity<ProfessionalDetailsDTO> findById(@PathVariable Long id) {
     ProfessionalDetailsDTO dto = service.findById(id);
     return ResponseEntity.ok(dto);
   }
 
   // Inserção pode ser permitida para admins e profissionais
-  @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSIONAL')")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSIONAL')")
   @PostMapping
   public ResponseEntity<ProfessionalDTO> insert(@Valid @RequestBody ProfessionalDTO dto) {
     dto = service.insert(dto);
@@ -54,7 +55,7 @@ public class ProfessionalController {
   }
 
   // Update: validado via service para só profissional dono ou admin
-  @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSIONAL')")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSIONAL')")
   @PutMapping(value = "/{id}")
   public ResponseEntity<ProfessionalDTO> update(@PathVariable Long id, @Valid @RequestBody ProfessionalDTO dto) {
     dto = service.update(id, dto);
@@ -62,10 +63,18 @@ public class ProfessionalController {
   }
 
   // Delete: só admin pode deletar (validado no service)
-  @PreAuthorize("hasRole('ADMIN')")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
   @DeleteMapping(value = "/{id}")
   public ResponseEntity<Void> delete(@PathVariable Long id) {
     service.delete(id);
     return ResponseEntity.noContent().build();
   }
+
+  @PreAuthorize("isAuthenticated()")
+  @GetMapping("/agdk/{slug}")
+  public ResponseEntity<ProfessionalPublicDTO> findBySlug(@PathVariable String slug) {
+    ProfessionalPublicDTO dto = service.findBySlug(slug);
+    return ResponseEntity.ok(dto);
+  }
+
 }

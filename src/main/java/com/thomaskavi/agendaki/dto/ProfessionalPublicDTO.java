@@ -2,21 +2,15 @@ package com.thomaskavi.agendaki.dto;
 
 import com.thomaskavi.agendaki.entities.Professional;
 
-public class ProfessionalDetailsDTO {
-
+public class ProfessionalPublicDTO {
   private Long id;
   private String name;
-  private String email;
-  private String phone;
-  private String profileImageUrl;
   private String slug;
   private String profession;
 
-  public ProfessionalDetailsDTO(Professional entity) {
+  public ProfessionalPublicDTO(Professional entity) {
     this.id = entity.getId();
     this.name = entity.getName();
-    this.email = entity.getEmail();
-    this.phone = entity.getPhone();
     this.slug = entity.getSlug();
     this.profession = entity.getProfession();
   }
@@ -25,28 +19,32 @@ public class ProfessionalDetailsDTO {
     return id;
   }
 
+  public void setId(Long id) {
+    this.id = id;
+  }
+
   public String getName() {
     return name;
   }
 
-  public String getEmail() {
-    return email;
-  }
-
-  public String getPhone() {
-    return phone;
-  }
-
-  public String getProfileImageUrl() {
-    return profileImageUrl;
+  public void setName(String name) {
+    this.name = name;
   }
 
   public String getSlug() {
     return slug;
   }
 
+  public void setSlug(String slug) {
+    this.slug = slug;
+  }
+
   public String getProfession() {
     return profession;
+  }
+
+  public void setProfession(String profession) {
+    this.profession = profession;
   }
 
 }

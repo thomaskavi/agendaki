@@ -23,4 +23,6 @@ public interface ProfessionalRepository extends JpaRepository<Professional, Long
   List<ProfessionalDetailsProjection> searchProfessionalAndRolesByEmail(String email);
 
   Optional<Professional> findByEmail(String email);
+
+  Optional<Professional> findBySlug(String slug);
 }
