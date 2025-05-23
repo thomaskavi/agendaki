@@ -4,21 +4,26 @@ import com.thomaskavi.agendaki.entities.ServiceOffered;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
 
 public class ServiceOfferedDTO {
 
   private Long id;
 
   @NotBlank(message = "O nome do serviço é obrigatório")
+  @Size(min = 5, max = 50, message = "Deve ter entre 5 e 50 caracteres")
   private String name;
 
+  @NotBlank(message = "Informe uma breve descrição do seu serviço")
+  @Size(min = 10, max = 100, message = "Deve ter entre 10 e 100 caracteres")
+  private String description;
+
   @NotNull(message = "O preço é obrigatório")
+  @PositiveOrZero
   private Double price;
 
   private Integer durationInMinutes;
-
-  @NotNull(message = "O ID do profissional é obrigatório")
-  private Long professionalId;
 
   public ServiceOfferedDTO() {
   }
@@ -26,9 +31,9 @@ public class ServiceOfferedDTO {
   public ServiceOfferedDTO(ServiceOffered entity) {
     this.id = entity.getId();
     this.name = entity.getName();
+    this.description = entity.getDescription();
     this.price = entity.getPrice();
     this.durationInMinutes = entity.getDurationInMinutes();
-    this.professionalId = entity.getProfessional() != null ? entity.getProfessional().getId() : null;
   }
 
   public Long getId() {
@@ -55,20 +60,20 @@ public class ServiceOfferedDTO {
     this.price = price;
   }
 
-  public Long getProfessionalId() {
-    return professionalId;
-  }
-
-  public void setProfessionalId(Long professionalId) {
-    this.professionalId = professionalId;
-  }
-
   public Integer getDurationInMinutes() {
     return durationInMinutes;
   }
 
   public void setDurationInMinutes(Integer durationInMinutes) {
     this.durationInMinutes = durationInMinutes;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
   }
 
 }

@@ -11,9 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.thomaskavi.agendaki.dto.ServiceOfferedDTO;
 import com.thomaskavi.agendaki.entities.Professional;
 import com.thomaskavi.agendaki.entities.ServiceOffered;
-import com.thomaskavi.agendaki.repository.ProfessionalRepository;
+import com.thomaskavi.agendaki.entities.User;
 import com.thomaskavi.agendaki.repository.ServiceOfferedRepository;
 import com.thomaskavi.agendaki.services.exceptions.DatabaseException;
+import com.thomaskavi.agendaki.services.exceptions.ForbiddenException;
 import com.thomaskavi.agendaki.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -22,10 +23,10 @@ import jakarta.persistence.EntityNotFoundException;
 public class ServiceOfferedService {
 
   @Autowired
-  private ServiceOfferedRepository repository;
+  private AuthService authService;
 
   @Autowired
-  private ProfessionalRepository professionalRepository;
+  private ServiceOfferedRepository repository;
 
   @Transactional(readOnly = true)
   public List<ServiceOfferedDTO> findAll() {
@@ -42,8 +43,15 @@ public class ServiceOfferedService {
 
   @Transactional
   public ServiceOfferedDTO insert(ServiceOfferedDTO dto) {
+    User user = authService.getAuthenticatedUser();
+
+    if (!(user instanceof Professional)) {
+      throw new ForbiddenException("Apenas profissionais podem criar serviços.");
+    }
+
     ServiceOffered entity = new ServiceOffered();
     copyDtoToEntity(dto, entity);
+    entity.setProfessional((Professional) user); // Aqui você seta o profissional autenticado
     entity = repository.save(entity);
     return new ServiceOfferedDTO(entity);
   }
@@ -74,11 +82,9 @@ public class ServiceOfferedService {
 
   private void copyDtoToEntity(ServiceOfferedDTO dto, ServiceOffered entity) {
     entity.setName(dto.getName());
+    entity.setDescription(dto.getDescription());
     entity.setPrice(dto.getPrice());
-
-    Professional professional = professionalRepository.findById(dto.getProfessionalId())
-        .orElseThrow(() -> new ResourceNotFoundException("Profissional não encontrado"));
-    entity.setProfessional(professional);
+    entity.setDurationInMinutes(dto.getDurationInMinutes());
   }
 
 }

@@ -1,6 +1,7 @@
 package com.thomaskavi.agendaki.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -58,4 +59,9 @@ public class UserService implements UserDetailsService {
     User entity = authenticated();
     return new UserDTO(entity);
   }
+
+  public Optional<User> findByEmail(String email) {
+    return repository.findByEmail(email);
+  }
+
 }
