@@ -15,7 +15,6 @@ public class UserDTO {
   private String email;
   private String phone;
   private LocalDate birthDate;
-  private String password;
   private List<String> roles = new ArrayList<>();
 
   public UserDTO() {
@@ -27,7 +26,6 @@ public class UserDTO {
     email = entity.getEmail();
     phone = entity.getPhone();
     birthDate = entity.getBirthDate();
-    password = entity.getPassword();
     for (GrantedAuthority role : entity.getRoles()) {
       roles.add(role.getAuthority());
     }
@@ -53,12 +51,7 @@ public class UserDTO {
     return birthDate;
   }
 
-  public String getPassword() {
-    return password;
-  }
-
   public List<String> getRoles() {
     return roles;
   }
-
 }

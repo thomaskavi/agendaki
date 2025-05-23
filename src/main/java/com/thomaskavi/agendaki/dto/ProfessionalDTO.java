@@ -3,14 +3,12 @@ package com.thomaskavi.agendaki.dto;
 import com.thomaskavi.agendaki.entities.Professional;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 public class ProfessionalDTO extends UserDTO {
 
   @NotBlank(message = "Senha é obrigatória")
-  @Size(min = 6, message = "A senha deve ter no mínimo 6 caracteres")
-  private String password;
 
+  private String password;
   private String slug;
   private String profession;
   private String profileImageUrl;

@@ -4,20 +4,32 @@ import java.time.LocalDateTime;
 
 import com.thomaskavi.agendaki.entities.Appointment;
 
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
+@Data
 public class AppointmentDTO {
 
   private Long id;
 
+  @FutureOrPresent(message = "Não é possível agendar uma data passada")
   @NotNull(message = "Data e hora são obrigatórios")
   private LocalDateTime dateTime;
 
   @NotNull(message = "O ID do cliente é obrigatório")
   private Long clientId;
 
+  private String clientName;
+  private String clientEmail;
+  private String clientPhone;
+
   @NotNull(message = "O ID do serviço é obrigatório")
   private Long serviceOfferedId;
+
+  private Long professionalId;
+  private String professionalName;
+  private String serviceOfferedName;
 
   public AppointmentDTO() {
   }
@@ -26,39 +38,23 @@ public class AppointmentDTO {
     this.id = entity.getId();
     this.dateTime = entity.getDateTime();
     this.clientId = entity.getClient() != null ? entity.getClient().getId() : null;
+
+    if (entity.getClient() != null) {
+      this.clientName = entity.getClient().getName();
+      this.clientEmail = entity.getClient().getEmail();
+      this.clientPhone = entity.getClient().getPhone();
+    }
+
     this.serviceOfferedId = entity.getService() != null ? entity.getService().getId() : null;
-  }
 
-  public Long getId() {
-    return id;
-  }
+    if (entity.getProfessional() != null) {
+      this.professionalId = entity.getProfessional().getId();
+      this.professionalName = entity.getProfessional().getName();
+    }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public LocalDateTime getDateTime() {
-    return dateTime;
-  }
-
-  public void setDateTime(LocalDateTime dateTime) {
-    this.dateTime = dateTime;
-  }
-
-  public Long getClientId() {
-    return clientId;
-  }
-
-  public void setClientId(Long clientId) {
-    this.clientId = clientId;
-  }
-
-  public Long getServiceOfferedId() {
-    return serviceOfferedId;
-  }
-
-  public void setServiceOfferedId(Long serviceOfferedId) {
-    this.serviceOfferedId = serviceOfferedId;
+    if (entity.getService() != null) {
+      this.serviceOfferedName = entity.getService().getName();
+    }
   }
 
 }

@@ -33,4 +33,8 @@ public class Appointment {
   @ManyToOne
   @JoinColumn(name = "service_id")
   private ServiceOffered service;
+
+  @ManyToOne
+  @JoinColumn(name = "professional_id")
+  private Professional professional;
 }

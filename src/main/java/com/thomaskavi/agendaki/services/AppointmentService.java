@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.thomaskavi.agendaki.dto.AppointmentDTO;
 import com.thomaskavi.agendaki.dto.UpdateAppointmentDTO;
 import com.thomaskavi.agendaki.entities.Appointment;
+import com.thomaskavi.agendaki.entities.Professional;
 import com.thomaskavi.agendaki.entities.ServiceOffered;
 import com.thomaskavi.agendaki.entities.User;
 import com.thomaskavi.agendaki.repository.AppointmentRepository;
@@ -23,6 +24,9 @@ import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class AppointmentService {
+
+  @Autowired
+  private AuthService authService;
 
   @Autowired
   private UserRepository userRepository;
@@ -46,22 +50,20 @@ public class AppointmentService {
     return new AppointmentDTO(entity);
   }
 
-  @Transactional
   public AppointmentDTO insert(AppointmentDTO dto) {
     Appointment entity = new Appointment();
-    copyDtoToEntity(dto, entity);
+    copyDtoToEntity(dto, entity); // preenche client e service
+    // pega o professional pelo service
+    entity.setProfessional(entity.getService().getProfessional());
     entity = repository.save(entity);
-    return new AppointmentDTO(entity);
+    return new AppointmentDTO(entity); // agora inclui os campos extras no retorno
   }
 
   @Transactional
   public AppointmentDTO update(Long id, UpdateAppointmentDTO dto) {
     try {
       Appointment entity = repository.getReferenceById(id);
-
-      // Atualiza somente os campos permitidos (data/hora e serviço)
       entity.setDateTime(dto.getDateTime());
-
       ServiceOffered service = serviceOfferedRepository.findById(dto.getServiceOfferedId())
           .orElseThrow(() -> new ResourceNotFoundException("Serviço não encontrado"));
       entity.setService(service);
@@ -86,19 +88,28 @@ public class AppointmentService {
 
   private void copyDtoToEntity(AppointmentDTO dto, Appointment entity) {
     entity.setDateTime(dto.getDateTime());
-
     User client = userRepository.findById(dto.getClientId())
         .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado"));
-
     if (!client.hasRole("ROLE_CLIENT")) {
       throw new DatabaseException("Usuário informado não é um cliente válido");
     }
-
     entity.setClient(client);
-
     ServiceOffered service = serviceOfferedRepository.findById(dto.getServiceOfferedId())
         .orElseThrow(() -> new ResourceNotFoundException("Serviço não encontrado"));
     entity.setService(service);
   }
 
+  @Transactional(readOnly = true)
+  public List<AppointmentDTO> findByAuthenticatedUser() {
+    User user = authService.getAuthenticatedUser();
+    List<Appointment> list = repository.findByClient(user);
+    return list.stream().map(AppointmentDTO::new).toList();
+  }
+
+  @Transactional(readOnly = true)
+  public List<AppointmentDTO> findByProfessional() {
+    Professional professional = authService.getAuthenticatedProfessional();
+    List<Appointment> list = repository.findByProfessional(professional);
+    return list.stream().map(AppointmentDTO::new).toList();
+  }
 }

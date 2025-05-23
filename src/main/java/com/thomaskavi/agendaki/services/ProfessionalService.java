@@ -7,6 +7,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -16,7 +17,9 @@ import com.thomaskavi.agendaki.dto.ProfessionalDTO;
 import com.thomaskavi.agendaki.dto.ProfessionalDetailsDTO;
 import com.thomaskavi.agendaki.dto.ProfessionalPublicDTO;
 import com.thomaskavi.agendaki.entities.Professional;
+import com.thomaskavi.agendaki.entities.Role;
 import com.thomaskavi.agendaki.repository.ProfessionalRepository;
+import com.thomaskavi.agendaki.repository.RoleRepository;
 import com.thomaskavi.agendaki.services.exceptions.DatabaseException;
 import com.thomaskavi.agendaki.services.exceptions.ResourceNotFoundException;
 
@@ -26,10 +29,16 @@ import jakarta.persistence.EntityNotFoundException;
 public class ProfessionalService {
 
   @Autowired
-  private ProfessionalRepository repository;
+  private AuthService authService;
 
   @Autowired
-  private AuthService authService;
+  private PasswordEncoder passwordEncoder;
+
+  @Autowired
+  private RoleRepository roleRepository;
+
+  @Autowired
+  private ProfessionalRepository repository;
 
   @Transactional(readOnly = true)
   public List<ProfessionalDetailsDTO> findAll() {
@@ -46,13 +55,26 @@ public class ProfessionalService {
 
   @Transactional
   public ProfessionalDTO insert(ProfessionalDTO dto) {
-    if (repository.findByEmail(dto.getEmail()).isPresent()) {
-      throw new DatabaseException("Email já está em uso");
-    } else {
+    try {
+      if (repository.findByEmail(dto.getEmail()).isPresent()) {
+        throw new DatabaseException("Email já está em uso");
+      }
+
       Professional entity = new Professional();
       copyDtoToEntity(dto, entity);
+      entity.setPassword(passwordEncoder.encode(dto.getPassword()));
+
+      Role role = roleRepository.findByAuthority("ROLE_PROFESSIONAL")
+          .orElseThrow(() -> new ResourceNotFoundException("Role 'ROLE_PROFESSIONAL' não encontrada"));
+      entity.getRoles().add(role);
+
       entity = repository.save(entity);
       return new ProfessionalDTO(entity);
+    } catch (DataIntegrityViolationException e) {
+      if (e.getMessage() != null && e.getMessage().toLowerCase().contains("slug")) {
+        throw new DatabaseException("Slug já está em uso", e);
+      }
+      throw new DatabaseException("Erro de integridade de dados", e);
     }
   }
 
@@ -93,6 +115,7 @@ public class ProfessionalService {
     entity.setSlug(dto.getSlug());
     entity.setProfession(dto.getProfession());
     entity.setPhone(dto.getPhone());
+    entity.setBirthDate(dto.getBirthDate());
     entity.setProfileImageUrl(dto.getProfileImageUrl());
   }
 

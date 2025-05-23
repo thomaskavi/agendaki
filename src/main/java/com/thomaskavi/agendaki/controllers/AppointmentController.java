@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,18 +29,21 @@ public class AppointmentController {
   @Autowired
   private AppointmentService service;
 
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
   @GetMapping
   public ResponseEntity<List<AppointmentDTO>> findAll() {
     List<AppointmentDTO> list = service.findAll();
     return ResponseEntity.ok(list);
   }
 
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
   @GetMapping(value = "/{id}")
   public ResponseEntity<AppointmentDTO> findById(@PathVariable Long id) {
     AppointmentDTO dto = service.findById(id);
     return ResponseEntity.ok(dto);
   }
 
+  @PreAuthorize("isAuthenticated()")
   @PostMapping
   public ResponseEntity<AppointmentDTO> insert(@Valid @RequestBody AppointmentDTO dto) {
     dto = service.insert(dto);
@@ -48,15 +52,32 @@ public class AppointmentController {
     return ResponseEntity.created(uri).body(dto);
   }
 
+  @PreAuthorize("isAuthenticated()")
   @PutMapping(value = "/{id}")
   public ResponseEntity<AppointmentDTO> update(@PathVariable Long id, @Valid @RequestBody UpdateAppointmentDTO dto) {
     AppointmentDTO updatedDto = service.update(id, dto);
     return ResponseEntity.ok(updatedDto);
   }
 
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
   @DeleteMapping(value = "/{id}")
   public ResponseEntity<Void> delete(@PathVariable Long id) {
     service.delete(id);
     return ResponseEntity.noContent().build();
   }
+
+  @PreAuthorize("isAuthenticated()")
+  @GetMapping("/my")
+  public ResponseEntity<List<AppointmentDTO>> findMyAppointments() {
+    List<AppointmentDTO> list = service.findByAuthenticatedUser();
+    return ResponseEntity.ok(list);
+  }
+
+  @PreAuthorize("hasRole('ROLE_PROFESSIONAL')")
+  @GetMapping("/received")
+  public ResponseEntity<List<AppointmentDTO>> findReceivedAppointments() {
+    List<AppointmentDTO> list = service.findByProfessional();
+    return ResponseEntity.ok(list);
+  }
+
 }

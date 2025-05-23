@@ -62,8 +62,7 @@ public class ProfessionalController {
     return ResponseEntity.ok(dto);
   }
 
-  // Delete: só admin pode deletar (validado no service)
-  @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   @DeleteMapping(value = "/{id}")
   public ResponseEntity<Void> delete(@PathVariable Long id) {
     service.delete(id);
