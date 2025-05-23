@@ -114,9 +114,11 @@ public class ProfessionalService {
     return new ProfessionalDTO(professional);
   }
 
+  @Transactional(readOnly = true)
   public ProfessionalPublicDTO findBySlug(String slug) {
     Professional professional = repository.findBySlug(slug)
         .orElseThrow(() -> new ResourceNotFoundException("Profissional não encontrado"));
     return new ProfessionalPublicDTO(professional);
   }
+
 }
