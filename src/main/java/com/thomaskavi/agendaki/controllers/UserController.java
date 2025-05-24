@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.thomaskavi.agendaki.dto.UserDTO;
+import com.thomaskavi.agendaki.dto.UserMeDTO;
 import com.thomaskavi.agendaki.services.UserService;
 
 @RestController
@@ -19,8 +19,8 @@ public class UserController {
 
   @PreAuthorize("isAuthenticated()")
   @GetMapping(value = "/me")
-  public ResponseEntity<UserDTO> getMe() {
-    UserDTO dto = service.getMe();
+  public ResponseEntity<UserMeDTO> getMe() {
+    UserMeDTO dto = service.getMe();
     return ResponseEntity.ok(dto);
   }
 }

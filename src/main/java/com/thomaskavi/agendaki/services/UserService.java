@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.thomaskavi.agendaki.dto.ClientSignupDTO;
 import com.thomaskavi.agendaki.dto.UserDTO;
+import com.thomaskavi.agendaki.dto.UserMeDTO;
 import com.thomaskavi.agendaki.entities.Role;
 import com.thomaskavi.agendaki.entities.User;
 import com.thomaskavi.agendaki.projections.UserDetailsProjection;
@@ -66,9 +67,9 @@ public class UserService implements UserDetailsService {
   }
 
   @Transactional(readOnly = true)
-  public UserDTO getMe() {
+  public UserMeDTO getMe() {
     User entity = authenticated();
-    return new UserDTO(entity);
+    return new UserMeDTO(entity);
   }
 
   public Optional<User> findByEmail(String email) {
