@@ -19,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.thomaskavi.agendaki.dto.ProfessionalDTO;
 import com.thomaskavi.agendaki.dto.ProfessionalDetailsDTO;
 import com.thomaskavi.agendaki.dto.ProfessionalPublicDTO;
+import com.thomaskavi.agendaki.dto.ProfessionalUpdateDTO;
 import com.thomaskavi.agendaki.services.ProfessionalService;
 
 import jakarta.validation.Valid;
@@ -44,22 +45,21 @@ public class ProfessionalController {
     return ResponseEntity.ok(dto);
   }
 
-  // Inserção pode ser permitida para admins e profissionais
-  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSIONAL')")
-  @PostMapping
-  public ResponseEntity<ProfessionalDTO> insert(@Valid @RequestBody ProfessionalDTO dto) {
+  // Inserção pode ser permitida para admins
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+  @PostMapping("/admin")
+  public ResponseEntity<ProfessionalDTO> adminInsert(@Valid @RequestBody ProfessionalDTO dto) {
     dto = service.insert(dto);
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
         .buildAndExpand(dto.getId()).toUri();
     return ResponseEntity.created(uri).body(dto);
   }
 
-  // Update: validado via service para só profissional dono ou admin
   @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSIONAL')")
   @PutMapping(value = "/{id}")
-  public ResponseEntity<ProfessionalDTO> update(@PathVariable Long id, @Valid @RequestBody ProfessionalDTO dto) {
-    dto = service.update(id, dto);
-    return ResponseEntity.ok(dto);
+  public ResponseEntity<ProfessionalDTO> update(@PathVariable Long id, @Valid @RequestBody ProfessionalUpdateDTO dto) {
+    ProfessionalDTO updated = service.update(id, dto);
+    return ResponseEntity.ok(updated);
   }
 
   @PreAuthorize("hasRole('ROLE_ADMIN')")

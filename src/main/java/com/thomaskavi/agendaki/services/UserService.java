@@ -7,18 +7,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.thomaskavi.agendaki.dto.ClientSignupDTO;
 import com.thomaskavi.agendaki.dto.UserDTO;
 import com.thomaskavi.agendaki.entities.Role;
 import com.thomaskavi.agendaki.entities.User;
 import com.thomaskavi.agendaki.projections.UserDetailsProjection;
+import com.thomaskavi.agendaki.repository.RoleRepository;
 import com.thomaskavi.agendaki.repository.UserRepository;
+import com.thomaskavi.agendaki.services.exceptions.DatabaseException;
+import com.thomaskavi.agendaki.services.exceptions.ResourceNotFoundException;
 import com.thomaskavi.agendaki.util.CustomUserUtil;
 
 @Service
 public class UserService implements UserDetailsService {
+
+  @Autowired
+  private PasswordEncoder passwordEncoder;
+
+  @Autowired
+  private RoleRepository roleRepository;
 
   @Autowired
   private UserRepository repository;
@@ -62,6 +73,27 @@ public class UserService implements UserDetailsService {
 
   public Optional<User> findByEmail(String email) {
     return repository.findByEmail(email);
+  }
+
+  @Transactional
+  public UserDTO createClient(ClientSignupDTO dto) {
+    if (repository.findByEmail(dto.getEmail()).isPresent()) {
+      throw new DatabaseException("Email já está em uso");
+    }
+
+    User user = new User();
+    user.setName(dto.getName());
+    user.setEmail(dto.getEmail());
+    user.setPassword(passwordEncoder.encode(dto.getPassword()));
+    user.setPhone(dto.getPhone());
+    user.setBirthDate(dto.getBirthDate());
+
+    Role role = roleRepository.findByAuthority("ROLE_CLIENT")
+        .orElseThrow(() -> new ResourceNotFoundException("Role 'ROLE_CLIENT' não encontrada"));
+    user.getRoles().add(role);
+
+    user = repository.save(user);
+    return new UserDTO(user);
   }
 
 }

@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.thomaskavi.agendaki.dto.ProfessionalDTO;
 import com.thomaskavi.agendaki.dto.ProfessionalDetailsDTO;
 import com.thomaskavi.agendaki.dto.ProfessionalPublicDTO;
+import com.thomaskavi.agendaki.dto.ProfessionalSignupDTO;
+import com.thomaskavi.agendaki.dto.ProfessionalUpdateDTO;
 import com.thomaskavi.agendaki.entities.Professional;
 import com.thomaskavi.agendaki.entities.Role;
 import com.thomaskavi.agendaki.repository.ProfessionalRepository;
@@ -79,8 +81,7 @@ public class ProfessionalService {
   }
 
   @Transactional
-  public ProfessionalDTO update(Long id, ProfessionalDTO dto) {
-    // Só deixa atualizar se for o próprio profissional ou admin
+  public ProfessionalDTO update(Long id, ProfessionalUpdateDTO dto) {
     authService.validateSelfOrAdmin(id);
 
     try {
@@ -108,17 +109,6 @@ public class ProfessionalService {
     }
   }
 
-  private void copyDtoToEntity(ProfessionalDTO dto, Professional entity) {
-    entity.setName(dto.getName());
-    entity.setEmail(dto.getEmail());
-    entity.setPassword(dto.getPassword());
-    entity.setSlug(dto.getSlug());
-    entity.setProfession(dto.getProfession());
-    entity.setPhone(dto.getPhone());
-    entity.setBirthDate(dto.getBirthDate());
-    entity.setProfileImageUrl(dto.getProfileImageUrl());
-  }
-
   protected Professional authenticated() {
     try {
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -142,6 +132,64 @@ public class ProfessionalService {
     Professional professional = repository.findBySlug(slug)
         .orElseThrow(() -> new ResourceNotFoundException("Profissional não encontrado"));
     return new ProfessionalPublicDTO(professional);
+  }
+
+  @Transactional
+  public ProfessionalDTO createProfessional(ProfessionalSignupDTO dto) {
+    if (repository.findByEmail(dto.getEmail()).isPresent()) {
+      throw new DatabaseException("Email já está em uso");
+    }
+
+    Professional professional = new Professional();
+    professional.setName(dto.getName());
+    professional.setEmail(dto.getEmail());
+    professional.setPassword(passwordEncoder.encode(dto.getPassword()));
+    professional.setPhone(dto.getPhone());
+    professional.setBirthDate(dto.getBirthDate());
+    professional.setSlug(dto.getSlug());
+    professional.setProfession(dto.getProfession());
+    professional.setProfileImageUrl(dto.getProfileImageUrl());
+
+    Role role = roleRepository.findByAuthority("ROLE_PROFESSIONAL")
+        .orElseThrow(() -> new ResourceNotFoundException("Role 'ROLE_PROFESSIONAL' não encontrada"));
+    professional.getRoles().add(role);
+
+    professional = repository.save(professional);
+    return new ProfessionalDTO(professional);
+  }
+
+  private void copyDtoToEntity(ProfessionalDTO dto, Professional entity) {
+    entity.setName(dto.getName());
+    entity.setEmail(dto.getEmail());
+    entity.setPhone(dto.getPhone());
+    entity.setBirthDate(dto.getBirthDate());
+    entity.setSlug(dto.getSlug());
+    entity.setProfession(dto.getProfession());
+    entity.setProfileImageUrl(dto.getProfileImageUrl());
+  }
+
+  private void copyDtoToEntity(ProfessionalUpdateDTO dto, Professional entity) {
+    if (dto.getName() != null) {
+      entity.setName(dto.getName());
+    }
+    if (dto.getEmail() != null) {
+      entity.setEmail(dto.getEmail());
+    }
+    if (dto.getPhone() != null) {
+      entity.setPhone(dto.getPhone());
+    }
+    if (dto.getBirthDate() != null) {
+      entity.setBirthDate(dto.getBirthDate());
+    }
+    if (dto.getSlug() != null) {
+      entity.setSlug(dto.getSlug());
+    }
+    if (dto.getProfession() != null) {
+      entity.setProfession(dto.getProfession());
+    }
+    if (dto.getProfileImageUrl() != null) {
+      entity.setProfileImageUrl(dto.getProfileImageUrl());
+    }
   }
 
 }

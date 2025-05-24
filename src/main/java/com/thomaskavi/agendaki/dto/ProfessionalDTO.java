@@ -2,11 +2,7 @@ package com.thomaskavi.agendaki.dto;
 
 import com.thomaskavi.agendaki.entities.Professional;
 
-import jakarta.validation.constraints.NotBlank;
-
 public class ProfessionalDTO extends UserDTO {
-
-  @NotBlank(message = "Senha é obrigatória")
 
   private String password;
   private String slug;

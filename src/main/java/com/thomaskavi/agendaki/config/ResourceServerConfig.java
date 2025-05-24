@@ -42,6 +42,7 @@ public class ResourceServerConfig {
 
     http.authorizeHttpRequests(authorize -> authorize
         .requestMatchers("/auth/**").permitAll()
+        .requestMatchers("/public/**").permitAll()
         .anyRequest().authenticated());
 
     http.oauth2ResourceServer(

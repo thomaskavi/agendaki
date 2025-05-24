@@ -46,4 +46,4 @@ INSERT INTO tb_appointment (date_time, client_id, service_id, professional_id) V
 INSERT INTO tb_appointment (date_time, client_id, service_id, professional_id) VALUES ('2027-06-15T09:00:00', 2, 3, 5); -- Maria (ID 2) agendou Limpeza Dental (ID 3) com Dentista (ID 5)
 INSERT INTO tb_appointment (date_time, client_id, service_id, professional_id) VALUES ('2027-06-15T14:00:00', 3, 4, 5); -- Alex (ID 3) agendou Clareamento Dental (ID 4) com Dentista (ID 5)
 INSERT INTO tb_appointment (date_time, client_id, service_id, professional_id) VALUES ('2027-06-16T11:00:00', 2, 5, 6); -- Maria (ID 2) agendou Consultoria Jurídica (ID 5) com Advogado (ID 6)
-INSERT INTO tb_appointment (date_time, client_id, service_id, professional_id) VALUES ('2027-06-20T10:00:00', 3, 6, 6); -- Alex (ID 3) agendou Análise de Contratos (ID 6) com Advogado (ID 6)
+INSERT INTO tb_appointment (date_time, client_id, service_id, professional_id) VALUES ('2027-06-20T10:00:00', 3, 6, 6); -- Alex (ID 3) agendou Análise de Contratos (ID 6) com Advogado (ID 6)  
