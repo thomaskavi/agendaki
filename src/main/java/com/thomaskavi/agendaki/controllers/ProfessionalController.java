@@ -57,8 +57,9 @@ public class ProfessionalController {
 
   @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSIONAL')")
   @PutMapping(value = "/{id}")
-  public ResponseEntity<ProfessionalDTO> update(@PathVariable Long id, @Valid @RequestBody ProfessionalUpdateDTO dto) {
-    ProfessionalDTO updated = service.update(id, dto);
+  public ResponseEntity<ProfessionalUpdateDTO> update(@PathVariable Long id,
+      @Valid @RequestBody ProfessionalUpdateDTO dto) {
+    ProfessionalUpdateDTO updated = service.update(id, dto);
     return ResponseEntity.ok(updated);
   }
 

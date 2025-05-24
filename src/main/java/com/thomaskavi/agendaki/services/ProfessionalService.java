@@ -81,14 +81,14 @@ public class ProfessionalService {
   }
 
   @Transactional
-  public ProfessionalDTO update(Long id, ProfessionalUpdateDTO dto) {
+  public ProfessionalUpdateDTO update(Long id, ProfessionalUpdateDTO dto) {
     authService.validateSelfOrAdmin(id);
 
     try {
       Professional entity = repository.getReferenceById(id);
       copyDtoToEntity(dto, entity);
       entity = repository.save(entity);
-      return new ProfessionalDTO(entity);
+      return new ProfessionalUpdateDTO(entity);
     } catch (EntityNotFoundException e) {
       throw new ResourceNotFoundException("Profissional não encontrado");
     }
@@ -171,9 +171,6 @@ public class ProfessionalService {
   private void copyDtoToEntity(ProfessionalUpdateDTO dto, Professional entity) {
     if (dto.getName() != null) {
       entity.setName(dto.getName());
-    }
-    if (dto.getEmail() != null) {
-      entity.setEmail(dto.getEmail());
     }
     if (dto.getPhone() != null) {
       entity.setPhone(dto.getPhone());

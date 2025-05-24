@@ -2,11 +2,11 @@ package com.thomaskavi.agendaki.dto;
 
 import java.time.LocalDate;
 
+import com.thomaskavi.agendaki.entities.Professional;
+
 public class ProfessionalUpdateDTO {
 
   private String name;
-
-  private String email;
 
   private String phone;
   private LocalDate birthDate;
@@ -17,21 +17,24 @@ public class ProfessionalUpdateDTO {
 
   private String profileImageUrl;
 
-  // Getters e Setters
+  public ProfessionalUpdateDTO() {
+  }
+
+  public ProfessionalUpdateDTO(Professional entity) {
+    name = entity.getName();
+    phone = entity.getPhone();
+    birthDate = entity.getBirthDate();
+    slug = entity.getSlug();
+    profession = entity.getProfession();
+    profileImageUrl = entity.getProfileImageUrl();
+  }
+
   public String getName() {
     return name;
   }
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
   }
 
   public String getPhone() {
