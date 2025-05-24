@@ -19,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.thomaskavi.agendaki.dto.ProfessionalDTO;
 import com.thomaskavi.agendaki.dto.ProfessionalDetailsDTO;
 import com.thomaskavi.agendaki.dto.ProfessionalPublicDTO;
+import com.thomaskavi.agendaki.dto.ProfessionalSignupDTO;
 import com.thomaskavi.agendaki.dto.ProfessionalUpdateDTO;
 import com.thomaskavi.agendaki.services.ProfessionalService;
 
@@ -48,11 +49,11 @@ public class ProfessionalController {
   // Inserção pode ser permitida para admins
   @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
   @PostMapping("/admin")
-  public ResponseEntity<ProfessionalDTO> adminInsert(@Valid @RequestBody ProfessionalDTO dto) {
-    dto = service.insert(dto);
+  public ResponseEntity<ProfessionalDTO> adminInsert(@Valid @RequestBody ProfessionalSignupDTO dto) {
+    ProfessionalDTO professional = service.createProfessional(dto);
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-        .buildAndExpand(dto.getId()).toUri();
-    return ResponseEntity.created(uri).body(dto);
+        .buildAndExpand(professional.getId()).toUri();
+    return ResponseEntity.created(uri).body(professional);
   }
 
   @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSIONAL')")

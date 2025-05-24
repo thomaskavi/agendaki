@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.thomaskavi.agendaki.dto.ClientSignupDTO;
 import com.thomaskavi.agendaki.dto.ProfessionalDTO;
 import com.thomaskavi.agendaki.dto.ProfessionalSignupDTO;
 import com.thomaskavi.agendaki.dto.UserDTO;
+import com.thomaskavi.agendaki.dto.UserSignupDTO;
 import com.thomaskavi.agendaki.services.ProfessionalService;
 import com.thomaskavi.agendaki.services.UserService;
 
@@ -28,8 +28,8 @@ public class PublicSignupController {
   private ProfessionalService professionalService;
 
   @PostMapping("/client-signup")
-  public ResponseEntity<UserDTO> signupClient(@RequestBody @Valid ClientSignupDTO dto) {
-    UserDTO user = userService.createClient(dto);
+  public ResponseEntity<UserDTO> signupUser(@RequestBody @Valid UserSignupDTO dto) {
+    UserDTO user = userService.createUser(dto);
     return ResponseEntity.status(HttpStatus.CREATED).body(user);
   }
 

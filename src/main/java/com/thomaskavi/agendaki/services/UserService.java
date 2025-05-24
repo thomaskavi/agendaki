@@ -4,16 +4,19 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.thomaskavi.agendaki.dto.ClientSignupDTO;
 import com.thomaskavi.agendaki.dto.UserDTO;
 import com.thomaskavi.agendaki.dto.UserMeDTO;
+import com.thomaskavi.agendaki.dto.UserSignupDTO;
 import com.thomaskavi.agendaki.dto.UserUpdateDTO;
 import com.thomaskavi.agendaki.entities.Role;
 import com.thomaskavi.agendaki.entities.User;
@@ -73,12 +76,26 @@ public class UserService implements UserDetailsService {
     return new UserMeDTO(entity);
   }
 
+  @Transactional(propagation = Propagation.SUPPORTS)
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  public void delete(Long id) {
+
+    if (!repository.existsById(id)) {
+      throw new ResourceNotFoundException("Usuário não encontrado");
+    }
+    try {
+      repository.deleteById(id);
+    } catch (DataIntegrityViolationException e) {
+      throw new DatabaseException("Não é possível remover um usuário com agendamento(s) em aberto", e);
+    }
+  }
+
   public Optional<User> findByEmail(String email) {
     return repository.findByEmail(email);
   }
 
   @Transactional
-  public UserDTO createClient(ClientSignupDTO dto) {
+  public UserDTO createUser(UserSignupDTO dto) {
     if (repository.findByEmail(dto.getEmail()).isPresent()) {
       throw new DatabaseException("Email já está em uso");
     }

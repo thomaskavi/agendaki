@@ -4,7 +4,6 @@ import com.thomaskavi.agendaki.entities.Professional;
 
 public class ProfessionalDTO extends UserDTO {
 
-  private String password;
   private String slug;
   private String profession;
   private String profileImageUrl;
@@ -13,18 +12,15 @@ public class ProfessionalDTO extends UserDTO {
     super();
   }
 
+  // Construtor para mapear de uma entidade Professional
   public ProfessionalDTO(Professional entity) {
-    super(entity); // Pega id, name, email, phone, roles do User
-    this.password = entity.getPassword();
+    super(entity); // Chama o construtor de UserDTO(User entity) para mapear os campos de User
     this.slug = entity.getSlug();
     this.profession = entity.getProfession();
     this.profileImageUrl = entity.getProfileImageUrl();
   }
 
-  public String getPassword() {
-    return password;
-  }
-
+  // --- Getters ---
   public String getSlug() {
     return slug;
   }
@@ -37,10 +33,7 @@ public class ProfessionalDTO extends UserDTO {
     return profileImageUrl;
   }
 
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
+  // --- Setters (se necessário) ---
   public void setSlug(String slug) {
     this.slug = slug;
   }

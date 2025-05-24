@@ -56,14 +56,14 @@ public class ProfessionalService {
   }
 
   @Transactional
-  public ProfessionalDTO insert(ProfessionalDTO dto) {
+  public ProfessionalDTO createProfessional(ProfessionalSignupDTO dto) {
     try {
       if (repository.findByEmail(dto.getEmail()).isPresent()) {
         throw new DatabaseException("Email já está em uso");
       }
 
       Professional entity = new Professional();
-      copyDtoToEntity(dto, entity);
+      copySignupDtoToEntity(dto, entity);
       entity.setPassword(passwordEncoder.encode(dto.getPassword()));
 
       Role role = roleRepository.findByAuthority("ROLE_PROFESSIONAL")
@@ -78,6 +78,23 @@ public class ProfessionalService {
       }
       throw new DatabaseException("Erro de integridade de dados", e);
     }
+  }
+
+  // Método auxiliar para mapear ProfessionalSignupDTO para Professional entity
+  private void copySignupDtoToEntity(ProfessionalSignupDTO dto, Professional entity) {
+    // Campos de UserSignupDTO (base)
+    entity.setName(dto.getName());
+    entity.setEmail(dto.getEmail());
+    entity.setPhone(dto.getPhone());
+    entity.setBirthDate(dto.getBirthDate());
+    // A senha será definida separadamente e criptografada
+
+    // Campos específicos de ProfessionalSignupDTO
+    entity.setSlug(dto.getSlug());
+    entity.setProfession(dto.getProfession());
+    entity.setProfileImageUrl(dto.getProfileImageUrl());
+    // Lembre-se: O campo 'services' não vem no DTO de signup, ele é preenchido
+    // depois
   }
 
   @Transactional
@@ -134,44 +151,10 @@ public class ProfessionalService {
     return new ProfessionalPublicDTO(professional);
   }
 
-  @Transactional
-  public ProfessionalDTO createProfessional(ProfessionalSignupDTO dto) {
-    if (repository.findByEmail(dto.getEmail()).isPresent()) {
-      throw new DatabaseException("Email já está em uso");
-    }
-
-    Professional professional = new Professional();
-    professional.setName(dto.getName());
-    professional.setEmail(dto.getEmail());
-    professional.setPassword(passwordEncoder.encode(dto.getPassword()));
-    professional.setPhone(dto.getPhone());
-    professional.setBirthDate(dto.getBirthDate());
-    professional.setSlug(dto.getSlug());
-    professional.setProfession(dto.getProfession());
-    professional.setProfileImageUrl(dto.getProfileImageUrl());
-
-    Role role = roleRepository.findByAuthority("ROLE_PROFESSIONAL")
-        .orElseThrow(() -> new ResourceNotFoundException("Role 'ROLE_PROFESSIONAL' não encontrada"));
-    professional.getRoles().add(role);
-
-    professional = repository.save(professional);
-    return new ProfessionalDTO(professional);
-  }
-
-  private void copyDtoToEntity(ProfessionalDTO dto, Professional entity) {
-    entity.setName(dto.getName());
-    entity.setEmail(dto.getEmail());
-    entity.setPhone(dto.getPhone());
-    entity.setBirthDate(dto.getBirthDate());
-    entity.setSlug(dto.getSlug());
-    entity.setProfession(dto.getProfession());
-    entity.setProfileImageUrl(dto.getProfileImageUrl());
-  }
-
   private void copyDtoToEntity(ProfessionalUpdateDTO dto, Professional entity) {
     if (dto.getName() != null) {
       entity.setName(dto.getName());
-    }
+    } 
     if (dto.getPhone() != null) {
       entity.setPhone(dto.getPhone());
     }

@@ -3,12 +3,9 @@ package com.thomaskavi.agendaki.dto;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.springframework.security.core.GrantedAuthority;
+import java.util.stream.Collectors;
 
 import com.thomaskavi.agendaki.entities.User;
-
-import jakarta.validation.constraints.Past;
 
 public class UserDTO {
 
@@ -16,24 +13,25 @@ public class UserDTO {
   private String name;
   private String email;
   private String phone;
-  @Past(message = "Verifique a data de nascimento e tente novamente")
   private LocalDate birthDate;
   private List<String> roles = new ArrayList<>();
 
   public UserDTO() {
   }
 
+  // Construtor para mapear de uma entidade User
   public UserDTO(User entity) {
-    id = entity.getId();
-    name = entity.getName();
-    email = entity.getEmail();
-    phone = entity.getPhone();
-    birthDate = entity.getBirthDate();
-    for (GrantedAuthority role : entity.getRoles()) {
-      roles.add(role.getAuthority());
-    }
+    this.id = entity.getId();
+    this.name = entity.getName();
+    this.email = entity.getEmail();
+    this.phone = entity.getPhone();
+    this.birthDate = entity.getBirthDate();
+    this.roles = entity.getRoles().stream()
+        .map(role -> role.getAuthority())
+        .collect(Collectors.toList());
   }
 
+  // --- Getters ---
   public Long getId() {
     return id;
   }
@@ -56,5 +54,30 @@ public class UserDTO {
 
   public List<String> getRoles() {
     return roles;
+  }
+
+  // --- Setters (se necessário) ---
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public void setPhone(String phone) {
+    this.phone = phone;
+  }
+
+  public void setBirthDate(LocalDate birthDate) {
+    this.birthDate = birthDate;
+  }
+
+  public void setRoles(List<String> roles) {
+    this.roles = roles;
   }
 }
