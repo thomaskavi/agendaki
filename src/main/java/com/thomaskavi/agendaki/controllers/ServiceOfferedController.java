@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.thomaskavi.agendaki.dto.ServiceOfferedDTO;
+import com.thomaskavi.agendaki.dto.ServiceOfferedUpdateDTO;
 import com.thomaskavi.agendaki.services.ServiceOfferedService;
 
 import jakarta.validation.Valid;
@@ -53,7 +54,8 @@ public class ServiceOfferedController {
 
   @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSIONAL')")
   @PutMapping(value = "/{id}")
-  public ResponseEntity<ServiceOfferedDTO> update(@PathVariable Long id, @Valid @RequestBody ServiceOfferedDTO dto) {
+  public ResponseEntity<ServiceOfferedUpdateDTO> update(@PathVariable Long id,
+      @Valid @RequestBody ServiceOfferedUpdateDTO dto) {
     dto = service.update(id, dto);
     return ResponseEntity.ok(dto);
   }

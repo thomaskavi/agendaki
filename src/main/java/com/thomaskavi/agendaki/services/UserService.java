@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.thomaskavi.agendaki.dto.ClientSignupDTO;
 import com.thomaskavi.agendaki.dto.UserDTO;
 import com.thomaskavi.agendaki.dto.UserMeDTO;
+import com.thomaskavi.agendaki.dto.UserUpdateDTO;
 import com.thomaskavi.agendaki.entities.Role;
 import com.thomaskavi.agendaki.entities.User;
 import com.thomaskavi.agendaki.projections.UserDetailsProjection;
@@ -22,6 +23,8 @@ import com.thomaskavi.agendaki.repository.UserRepository;
 import com.thomaskavi.agendaki.services.exceptions.DatabaseException;
 import com.thomaskavi.agendaki.services.exceptions.ResourceNotFoundException;
 import com.thomaskavi.agendaki.util.CustomUserUtil;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -52,7 +55,6 @@ public class UserService implements UserDetailsService {
     for (UserDetailsProjection projection : result) {
       user.addRole(new Role(projection.getRoleId(), projection.getAuthority()));
     }
-
     return user;
   }
 
@@ -63,7 +65,6 @@ public class UserService implements UserDetailsService {
     } catch (Exception e) {
       throw new UsernameNotFoundException("Email not found");
     }
-
   }
 
   @Transactional(readOnly = true)
@@ -97,4 +98,28 @@ public class UserService implements UserDetailsService {
     return new UserDTO(user);
   }
 
+  @Transactional
+  public UserUpdateDTO updateUser(UserUpdateDTO dto) {
+    User user = authenticated();
+    try {
+      copyDtoToEntity(dto, user);
+      user = repository.getReferenceById(user.getId());
+      user = repository.save(user);
+      return new UserUpdateDTO(user);
+    } catch (EntityNotFoundException e) {
+      throw new ResourceNotFoundException("Usuário não encontrado");
+    }
+  }
+
+  private void copyDtoToEntity(UserUpdateDTO dto, User entity) {
+    if (dto.getName() != null) {
+      entity.setName(dto.getName());
+    }
+    if (dto.getPhone() != null) {
+      entity.setPhone(dto.getPhone());
+    }
+    if (dto.getBirthDate() != null) {
+      entity.setBirthDate(dto.getBirthDate());
+    }
+  }
 }

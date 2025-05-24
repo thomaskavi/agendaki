@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Past;
 
 public class UserInsertDTO {
 
@@ -20,7 +20,7 @@ public class UserInsertDTO {
 
   private String phone;
 
-  @PastOrPresent(message = "A data de nascimento não pode ser futura")
+  @Past(message = "Verifique a data de nascimento e tente novamente")
   private LocalDate birthDate;
 
   public UserInsertDTO() {

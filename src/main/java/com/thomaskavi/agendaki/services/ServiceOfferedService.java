@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.thomaskavi.agendaki.dto.ServiceOfferedDTO;
+import com.thomaskavi.agendaki.dto.ServiceOfferedUpdateDTO;
 import com.thomaskavi.agendaki.entities.Professional;
 import com.thomaskavi.agendaki.entities.ServiceOffered;
 import com.thomaskavi.agendaki.entities.User;
@@ -51,18 +52,25 @@ public class ServiceOfferedService {
 
     ServiceOffered entity = new ServiceOffered();
     copyDtoToEntity(dto, entity);
-    entity.setProfessional((Professional) user); // Aqui você seta o profissional autenticado
+    entity.setProfessional((Professional) user);
     entity = repository.save(entity);
     return new ServiceOfferedDTO(entity);
   }
 
   @Transactional
-  public ServiceOfferedDTO update(Long id, ServiceOfferedDTO dto) {
+  public ServiceOfferedUpdateDTO update(Long id, ServiceOfferedUpdateDTO dto) {
+    User user = authService.getAuthenticatedProfessional();
+
     try {
       ServiceOffered entity = repository.getReferenceById(id);
+
+      if (!entity.getProfessional().getId().equals(user.getId())) {
+        throw new ForbiddenException("Você só pode atualizar seus próprios serviços");
+      }
+
       copyDtoToEntity(dto, entity);
       entity = repository.save(entity);
-      return new ServiceOfferedDTO(entity);
+      return new ServiceOfferedUpdateDTO(entity);
     } catch (EntityNotFoundException e) {
       throw new ResourceNotFoundException("Serviço não encontrado");
     }
@@ -85,6 +93,25 @@ public class ServiceOfferedService {
     entity.setDescription(dto.getDescription());
     entity.setPrice(dto.getPrice());
     entity.setDurationInMinutes(dto.getDurationInMinutes());
+  }
+
+  private void copyDtoToEntity(ServiceOfferedUpdateDTO dto, ServiceOffered entity) {
+    if (dto.getName() != null) {
+      entity.setName(dto.getName());
+    }
+
+    if (dto.getDescription() != null) {
+      entity.setDescription(dto.getDescription());
+    }
+
+    if (dto.getPrice() != null) {
+      entity.setPrice(dto.getPrice());
+    }
+
+    if (dto.getDurationInMinutes() != null) {
+      entity.setDurationInMinutes(dto.getDurationInMinutes());
+    }
+
   }
 
 }

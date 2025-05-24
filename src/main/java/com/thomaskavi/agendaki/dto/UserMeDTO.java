@@ -7,12 +7,15 @@ import java.util.stream.Collectors;
 import com.thomaskavi.agendaki.entities.Professional;
 import com.thomaskavi.agendaki.entities.User;
 
+import jakarta.validation.constraints.Past;
+
 public class UserMeDTO {
 
   private Long id;
   private String name;
   private String email;
   private String phone;
+  @Past(message = "Verifique a data de nascimento e tente novamente")
   private LocalDate birthDate;
   private List<String> roles;
 

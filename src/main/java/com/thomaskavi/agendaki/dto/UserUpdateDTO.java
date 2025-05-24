@@ -1,37 +1,27 @@
 package com.thomaskavi.agendaki.dto;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.security.core.GrantedAuthority;
 
 import com.thomaskavi.agendaki.entities.User;
 
 import jakarta.validation.constraints.Past;
 
-public class UserDTO {
+public class UserUpdateDTO {
 
   private Long id;
   private String name;
-  private String email;
   private String phone;
   @Past(message = "Verifique a data de nascimento e tente novamente")
   private LocalDate birthDate;
-  private List<String> roles = new ArrayList<>();
 
-  public UserDTO() {
+  public UserUpdateDTO() {
   }
 
-  public UserDTO(User entity) {
+  public UserUpdateDTO(User entity) {
     id = entity.getId();
     name = entity.getName();
-    email = entity.getEmail();
     phone = entity.getPhone();
     birthDate = entity.getBirthDate();
-    for (GrantedAuthority role : entity.getRoles()) {
-      roles.add(role.getAuthority());
-    }
   }
 
   public Long getId() {
@@ -42,10 +32,6 @@ public class UserDTO {
     return name;
   }
 
-  public String getEmail() {
-    return email;
-  }
-
   public String getPhone() {
     return phone;
   }
@@ -54,7 +40,4 @@ public class UserDTO {
     return birthDate;
   }
 
-  public List<String> getRoles() {
-    return roles;
-  }
 }

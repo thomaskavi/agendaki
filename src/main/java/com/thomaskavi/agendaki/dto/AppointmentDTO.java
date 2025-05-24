@@ -30,6 +30,7 @@ public class AppointmentDTO {
   private Long professionalId;
   private String professionalName;
   private String serviceOfferedName;
+  private Double servicePrice;
 
   public AppointmentDTO() {
   }
@@ -54,6 +55,7 @@ public class AppointmentDTO {
 
     if (entity.getService() != null) {
       this.serviceOfferedName = entity.getService().getName();
+      this.servicePrice = entity.getService().getPrice();
     }
   }
 

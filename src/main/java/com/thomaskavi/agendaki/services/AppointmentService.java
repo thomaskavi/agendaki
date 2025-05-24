@@ -1,5 +1,6 @@
 package com.thomaskavi.agendaki.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,10 +64,11 @@ public class AppointmentService {
   public AppointmentDTO update(Long id, UpdateAppointmentDTO dto) {
     try {
       Appointment entity = repository.getReferenceById(id);
+      LocalDateTime newDateTime = dto.getDateTime();
+      if (newDateTime.isBefore(LocalDateTime.now())) {
+        throw new DatabaseException("A nova data e hora do agendamento não podem ser no passado");
+      }
       entity.setDateTime(dto.getDateTime());
-      ServiceOffered service = serviceOfferedRepository.findById(dto.getServiceOfferedId())
-          .orElseThrow(() -> new ResourceNotFoundException("Serviço não encontrado"));
-      entity.setService(service);
       entity = repository.save(entity);
       return new AppointmentDTO(entity);
     } catch (EntityNotFoundException e) {
