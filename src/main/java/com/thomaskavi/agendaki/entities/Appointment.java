@@ -29,7 +29,11 @@ public class Appointment {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private LocalDateTime dateTime;
+  @Column(nullable = false)
+  private LocalDateTime startTime;
+
+  @Column(nullable = false)
+  private LocalDateTime endTime;
 
   @ManyToOne
   @JoinColumn(name = "client_id")

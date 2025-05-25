@@ -12,13 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.thomaskavi.agendaki.dto.AppointmentDTO;
 import com.thomaskavi.agendaki.dto.UpdateAppointmentDTO;
 import com.thomaskavi.agendaki.entities.Appointment;
+import com.thomaskavi.agendaki.entities.AvailableSlot;
 import com.thomaskavi.agendaki.entities.Professional;
 import com.thomaskavi.agendaki.entities.ServiceOffered;
 import com.thomaskavi.agendaki.entities.User;
 import com.thomaskavi.agendaki.enums.AppointmentStatus;
 import com.thomaskavi.agendaki.repository.AppointmentRepository;
+import com.thomaskavi.agendaki.repository.AvailableSlotRepository;
 import com.thomaskavi.agendaki.repository.ServiceOfferedRepository;
-import com.thomaskavi.agendaki.repository.UserRepository;
 import com.thomaskavi.agendaki.services.exceptions.DatabaseException;
 import com.thomaskavi.agendaki.services.exceptions.ResourceNotFoundException;
 
@@ -31,13 +32,13 @@ public class AppointmentService {
   private AuthService authService;
 
   @Autowired
-  private UserRepository userRepository;
-
-  @Autowired
   private AppointmentRepository repository;
 
   @Autowired
   private ServiceOfferedRepository serviceOfferedRepository;
+
+  @Autowired
+  private AvailableSlotRepository availableSlotRepository;
 
   @Transactional(readOnly = true)
   public List<AppointmentDTO> findAll() {
@@ -53,12 +54,34 @@ public class AppointmentService {
   }
 
   public AppointmentDTO insert(AppointmentDTO dto) {
+    User client = authService.getAuthenticatedUser();
+
+    ServiceOffered service = serviceOfferedRepository.findById(dto.getServiceOfferedId())
+        .orElseThrow(() -> new ResourceNotFoundException("Serviço não encontrado"));
+
+    Professional professional = service.getProfessional();
+
+    LocalDateTime startTime = dto.getStartTime();
+    LocalDateTime endTime = startTime.plusMinutes(service.getDurationInMinutes());
+
+    AvailableSlot slot = availableSlotRepository.findByProfessionalAndStartTimeAndEndTimeAndIsBookedFalse(
+        professional, startTime, endTime)
+        .orElseThrow(() -> new DatabaseException("Esse horário não está disponível para agendamento."));
+
     Appointment entity = new Appointment();
-    copyDtoToEntity(dto, entity); // preenche client e service
-    // pega o professional pelo service
-    entity.setProfessional(entity.getService().getProfessional());
+    entity.setClient(client);
+    entity.setService(service);
+    entity.setProfessional(professional);
+    entity.setStartTime(startTime);
+    entity.setEndTime(endTime);
+    entity.setStatus(AppointmentStatus.PENDING);
+
     entity = repository.save(entity);
-    return new AppointmentDTO(entity); // agora inclui os campos extras no retorno
+
+    slot.setBooked(true);
+    availableSlotRepository.save(slot);
+
+    return new AppointmentDTO(entity);
   }
 
   @Transactional
@@ -68,11 +91,18 @@ public class AppointmentService {
       if (entity.getStatus().equals(AppointmentStatus.COMPLETED)) {
         throw new DatabaseException("Não é possível atualizar um agendamento finalizado.");
       }
-      LocalDateTime newDateTime = dto.getDateTime();
-      if (newDateTime.isBefore(LocalDateTime.now())) {
+
+      LocalDateTime newStart = dto.getStartTime();
+      if (newStart.isBefore(LocalDateTime.now())) {
         throw new DatabaseException("A nova data e hora do agendamento não podem ser no passado");
       }
-      entity.setDateTime(dto.getDateTime());
+
+      ServiceOffered service = entity.getService();
+      LocalDateTime newEnd = newStart.plusMinutes(service.getDurationInMinutes());
+
+      entity.setStartTime(newStart);
+      entity.setEndTime(newEnd);
+
       entity = repository.save(entity);
       return new AppointmentDTO(entity);
     } catch (EntityNotFoundException e) {
@@ -90,19 +120,6 @@ public class AppointmentService {
     } catch (DataIntegrityViolationException e) {
       throw new DatabaseException("Falha de integridade referencial");
     }
-  }
-
-  private void copyDtoToEntity(AppointmentDTO dto, Appointment entity) {
-    entity.setDateTime(dto.getDateTime());
-    User client = userRepository.findById(dto.getClientId())
-        .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado"));
-    if (!client.hasRole("ROLE_CLIENT")) {
-      throw new DatabaseException("Usuário informado não é um cliente válido");
-    }
-    entity.setClient(client);
-    ServiceOffered service = serviceOfferedRepository.findById(dto.getServiceOfferedId())
-        .orElseThrow(() -> new ResourceNotFoundException("Serviço não encontrado"));
-    entity.setService(service);
   }
 
   @Transactional(readOnly = true)

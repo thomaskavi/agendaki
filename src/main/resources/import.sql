@@ -41,9 +41,36 @@ INSERT INTO tb_service_offered (name, description, price, duration_in_minutes, p
 -- Dentista (ID 5) oferece service_id 3 (Consulta e Limpeza Dental Preventiva) e 4 (Sessão de Clareamento Dental Profissional)
 -- Advogado (ID 6) oferece service_id 5 (Consultoria Jurídica Rápida) e 6 (Análise Detalhada de Contratos)
 
-INSERT INTO tb_appointment (date_time, client_id, service_id, professional_id, status) VALUES ('2026-06-01T14:30:00', 2, 1, 4, 'PENDING'); -- Maria (ID 2) agendou Tatuagem Minimalista (ID 1) com Tatuador (ID 4)
-INSERT INTO tb_appointment (date_time, client_id, service_id, professional_id, status) VALUES ('2027-06-01T14:30:00', 3, 2, 4, 'PENDING'); -- Alex (ID 3) agendou Tatuagem Elaborada (ID 2) com Tatuador (ID 4)
-INSERT INTO tb_appointment (date_time, client_id, service_id, professional_id, status) VALUES ('2027-06-15T09:00:00', 2, 3, 5, 'PENDING'); -- Maria (ID 2) agendou Limpeza Dental (ID 3) com Dentista (ID 5)
-INSERT INTO tb_appointment (date_time, client_id, service_id, professional_id, status) VALUES ('2027-06-15T14:00:00', 3, 4, 5, 'PENDING'); -- Alex (ID 3) agendou Clareamento Dental (ID 4) com Dentista (ID 5)
-INSERT INTO tb_appointment (date_time, client_id, service_id, professional_id, status) VALUES ('2027-06-16T11:00:00', 2, 5, 6, 'PENDING'); -- Maria (ID 2) agendou Consultoria Jurídica (ID 5) com Advogado (ID 6)
-INSERT INTO tb_appointment (date_time, client_id, service_id, professional_id, status) VALUES ('2027-06-20T10:00:00', 3, 6, 6, 'PENDING'); -- Alex (ID 3) agendou Análise de Contratos (ID 6) com Advogado (ID 6)  
+-- Maria (ID 2) agendou Tatuagem Minimalista (ID 1) com Tatuador (ID 4)
+INSERT INTO tb_appointment (start_time, end_time, client_id, service_id, professional_id, status) VALUES ('2025-06-01T14:30:00', '2025-06-01T15:45:00', 2, 1, 4, 'PENDING');
+
+-- Alex (ID 3) agendou Tatuagem Elaborada (ID 2) com Tatuador (ID 4)
+INSERT INTO tb_appointment (start_time, end_time, client_id, service_id, professional_id, status) VALUES ('2025-06-01T16:00:00', '2025-06-01T19:00:00', 3, 2, 4, 'PENDING');
+
+-- Maria (ID 2) agendou Limpeza Dental (ID 3) com Dentista (ID 5)
+INSERT INTO tb_appointment (start_time, end_time, client_id, service_id, professional_id, status) VALUES ('2025-06-03T09:00:00', '2025-06-03T09:50:00', 2, 3, 5, 'PENDING');
+
+-- Alex (ID 3) agendou Clareamento Dental (ID 4) com Dentista (ID 5)
+INSERT INTO tb_appointment (start_time, end_time, client_id, service_id, professional_id, status) VALUES ('2025-06-04T14:00:00', '2025-06-04T15:15:00', 3, 4, 5, 'PENDING');
+
+-- Maria (ID 2) agendou Consultoria Jurídica (ID 5) com Advogado (ID 6)
+INSERT INTO tb_appointment (start_time, end_time, client_id, service_id, professional_id, status) VALUES ('2025-06-05T11:00:00', '2025-06-05T11:45:00', 2, 5, 6, 'PENDING');
+
+-- Alex (ID 3) agendou Análise de Contratos (ID 6) com Advogado (ID 6)
+INSERT INTO tb_appointment (start_time, end_time, client_id, service_id, professional_id, status) VALUES ('2025-06-06T10:00:00', '2025-06-06T11:30:00', 3, 6, 6, 'PENDING');
+
+
+-- Slots disponíveis do Tatuador (id 4)
+INSERT INTO tb_available_slot (professional_id, start_time, end_time, is_booked) VALUES (4, '2025-06-01T10:00:00', '2025-06-01T11:15:00', false);
+INSERT INTO tb_available_slot (professional_id, start_time, end_time, is_booked) VALUES (4, '2025-06-02T09:30:00', '2025-06-02T12:00:00', false);
+INSERT INTO tb_available_slot (professional_id, start_time, end_time, is_booked) VALUES (4, '2025-06-02T13:00:00', '2025-06-02T14:15:00', false);
+
+-- Slots disponíveis do Dentista (id 5)
+INSERT INTO tb_available_slot (professional_id, start_time, end_time, is_booked) VALUES (5, '2025-06-03T08:00:00', '2025-06-03T08:50:00', false);
+INSERT INTO tb_available_slot (professional_id, start_time, end_time, is_booked) VALUES (5, '2025-06-03T10:00:00', '2025-06-03T11:15:00', false);
+INSERT INTO tb_available_slot (professional_id, start_time, end_time, is_booked) VALUES (5, '2025-06-04T10:00:00', '2025-06-04T11:15:00', false);
+
+-- Slots disponíveis do Advogado (id 6)
+INSERT INTO tb_available_slot (professional_id, start_time, end_time, is_booked) VALUES (6, '2025-06-05T09:00:00', '2025-06-05T09:45:00', false);
+INSERT INTO tb_available_slot (professional_id, start_time, end_time, is_booked) VALUES (6, '2025-06-05T13:30:00', '2025-06-05T15:00:00', false);
+INSERT INTO tb_available_slot (professional_id, start_time, end_time, is_booked) VALUES (6, '2025-06-06T13:00:00', '2025-06-06T14:30:00', false);

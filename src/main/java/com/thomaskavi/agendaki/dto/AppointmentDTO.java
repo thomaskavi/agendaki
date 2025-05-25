@@ -15,8 +15,10 @@ public class AppointmentDTO {
   private Long id;
 
   @FutureOrPresent(message = "Não é possível agendar uma data passada")
-  @NotNull(message = "Data e hora são obrigatórios")
-  private LocalDateTime dateTime;
+  @NotNull(message = "Horário de início é obrigatório")
+  private LocalDateTime startTime;
+
+  private LocalDateTime endTime;
 
   @NotNull(message = "O ID do cliente é obrigatório")
   private Long clientId;
@@ -39,7 +41,8 @@ public class AppointmentDTO {
 
   public AppointmentDTO(Appointment entity) {
     this.id = entity.getId();
-    this.dateTime = entity.getDateTime();
+    this.startTime = entity.getStartTime();
+    this.endTime = entity.getEndTime();
     this.clientId = entity.getClient() != null ? entity.getClient().getId() : null;
     this.status = entity.getStatus();
 

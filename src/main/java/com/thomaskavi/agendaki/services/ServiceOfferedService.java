@@ -78,9 +78,19 @@ public class ServiceOfferedService {
 
   @Transactional(propagation = Propagation.SUPPORTS)
   public void delete(Long id) {
-    if (!repository.existsById(id)) {
-      throw new ResourceNotFoundException("Serviço não encontrado");
+    ServiceOffered entity = repository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("Serviço não encontrado"));
+
+    User user = authService.getAuthenticatedUser();
+
+    // Se não for admin, valida se é dono do serviço
+    if (!user.hasRole("ROLE_ADMIN")) {
+      // Verifica se user é profissional e dono do serviço
+      if (!(user instanceof Professional) || !entity.getProfessional().getId().equals(user.getId())) {
+        throw new ForbiddenException("Apenas administradores ou o profissional dono podem deletar este serviço.");
+      }
     }
+
     try {
       repository.deleteById(id);
     } catch (DataIntegrityViolationException e) {

@@ -2,6 +2,7 @@ package com.thomaskavi.agendaki.repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -14,7 +15,7 @@ public interface AvailableSlotRepository extends JpaRepository<AvailableSlot, Lo
 
   List<AvailableSlot> findByProfessionalAndIsBookedFalse(Professional professional);
 
-  // Verificar conflitos de horários
-  boolean existsByProfessionalIdAndStartTimeLessThanEqualAndEndTimeGreaterThanEqual(
-      Long professionalId, LocalDateTime endTime, LocalDateTime startTime);
+  Optional<AvailableSlot> findByProfessionalAndStartTimeAndEndTimeAndIsBookedFalse(
+      Professional professional, LocalDateTime startTime, LocalDateTime endTime);
+
 }
