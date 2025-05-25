@@ -86,8 +86,13 @@ public class AppointmentService {
 
   @Transactional
   public AppointmentDTO update(Long id, UpdateAppointmentDTO dto) {
+    User user = authService.getAuthenticatedUser();
+
     try {
       Appointment entity = repository.getReferenceById(id);
+      if (!entity.getClient().getId().equals(user.getId()))
+        throw new DatabaseException("Um usuário só pode atualizar seus próprios agendamentos.");
+
       if (entity.getStatus().equals(AppointmentStatus.COMPLETED)) {
         throw new DatabaseException("Não é possível atualizar um agendamento finalizado.");
       }
