@@ -90,7 +90,7 @@ public class AppointmentService {
 
     try {
       Appointment entity = repository.getReferenceById(id);
-      if (!entity.getClient().getId().equals(user.getId()))
+      if (!entity.getClient().getId().equals(user.getId()) && !entity.getProfessional().getId().equals(user.getId()))
         throw new DatabaseException("Um usuário só pode atualizar seus próprios agendamentos.");
 
       if (entity.getStatus().equals(AppointmentStatus.COMPLETED)) {
