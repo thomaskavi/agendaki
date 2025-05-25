@@ -2,7 +2,12 @@ package com.thomaskavi.agendaki.entities;
 
 import java.time.LocalDateTime;
 
+import com.thomaskavi.agendaki.enums.AppointmentStatus;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -37,4 +42,9 @@ public class Appointment {
   @ManyToOne
   @JoinColumn(name = "professional_id")
   private Professional professional;
+
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private AppointmentStatus status = AppointmentStatus.PENDING;
+
 }

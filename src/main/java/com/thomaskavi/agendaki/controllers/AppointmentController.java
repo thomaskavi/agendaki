@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -80,4 +81,24 @@ public class AppointmentController {
     return ResponseEntity.ok(list);
   }
 
+  @PreAuthorize("hasRole('ROLE_PROFESSIONAL')")
+  @PatchMapping("/{id}/accept")
+  public ResponseEntity<Void> acceptAppointment(@PathVariable Long id) {
+    service.acceptAppointment(id);
+    return ResponseEntity.ok().build();
+  }
+
+  @PreAuthorize("hasRole('ROLE_PROFESSIONAL')")
+  @PatchMapping("/{id}/complete")
+  public ResponseEntity<Void> completeAppointment(@PathVariable Long id) {
+    service.completeAppointment(id);
+    return ResponseEntity.ok().build();
+  }
+
+  @PreAuthorize("isAuthenticated()")
+  @PatchMapping("/{id}/cancel")
+  public ResponseEntity<Void> cancelAppointment(@PathVariable Long id) {
+    service.cancelAppointment(id);
+    return ResponseEntity.ok().build();
+  }
 }

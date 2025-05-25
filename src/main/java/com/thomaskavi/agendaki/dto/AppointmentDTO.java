@@ -3,6 +3,7 @@ package com.thomaskavi.agendaki.dto;
 import java.time.LocalDateTime;
 
 import com.thomaskavi.agendaki.entities.Appointment;
+import com.thomaskavi.agendaki.enums.AppointmentStatus;
 
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
@@ -31,6 +32,7 @@ public class AppointmentDTO {
   private String professionalName;
   private String serviceOfferedName;
   private Double servicePrice;
+  private AppointmentStatus status;
 
   public AppointmentDTO() {
   }
@@ -39,6 +41,7 @@ public class AppointmentDTO {
     this.id = entity.getId();
     this.dateTime = entity.getDateTime();
     this.clientId = entity.getClient() != null ? entity.getClient().getId() : null;
+    this.status = entity.getStatus();
 
     if (entity.getClient() != null) {
       this.clientName = entity.getClient().getName();
