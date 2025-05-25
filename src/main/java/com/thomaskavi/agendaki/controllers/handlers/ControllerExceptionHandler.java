@@ -42,9 +42,15 @@ public class ControllerExceptionHandler {
     ValidationError err = new ValidationError(Instant.now(), status.value(), "Dados inválidos", e.getMessage(),
         request.getRequestURI());
 
+    // Field-level validation errors (e.g., @NotNull, @Size, etc)
     for (FieldError f : e.getBindingResult().getFieldErrors()) {
       err.addError(f.getField(), f.getDefaultMessage());
     }
+
+    // Class-level validation errors (e.g., @EndTimeAfterStartTime)
+    e.getBindingResult().getGlobalErrors().forEach(globalError -> {
+      err.addError(globalError.getObjectName(), globalError.getDefaultMessage());
+    });
 
     return ResponseEntity.status(status).body(err);
   }
