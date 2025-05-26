@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.thomaskavi.agendaki.dto.UserDTO;
+import com.thomaskavi.agendaki.dto.PublicUserDTO;
 import com.thomaskavi.agendaki.dto.UserMeDTO;
 import com.thomaskavi.agendaki.dto.UserSignupDTO;
 import com.thomaskavi.agendaki.dto.UserUpdateDTO;
@@ -95,7 +95,7 @@ public class UserService implements UserDetailsService {
   }
 
   @Transactional
-  public UserDTO createUser(UserSignupDTO dto) {
+  public PublicUserDTO createUser(UserSignupDTO dto) {
     if (repository.findByEmail(dto.getEmail()).isPresent()) {
       throw new DatabaseException("Email já está em uso");
     }
@@ -112,7 +112,7 @@ public class UserService implements UserDetailsService {
     user.getRoles().add(role);
 
     user = repository.save(user);
-    return new UserDTO(user);
+    return new PublicUserDTO(user);
   }
 
   @Transactional

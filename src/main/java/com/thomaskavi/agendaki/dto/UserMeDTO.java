@@ -1,8 +1,6 @@
 package com.thomaskavi.agendaki.dto;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import com.thomaskavi.agendaki.entities.Professional;
 import com.thomaskavi.agendaki.entities.User;
@@ -17,7 +15,6 @@ public class UserMeDTO {
   private String phone;
   @Past(message = "Verifique a data de nascimento e tente novamente")
   private LocalDate birthDate;
-  private List<String> roles;
 
   private String slug;
   private String profession;
@@ -29,9 +26,6 @@ public class UserMeDTO {
     this.email = entity.getEmail();
     this.phone = entity.getPhone();
     this.birthDate = entity.getBirthDate();
-    this.roles = entity.getRoles().stream()
-        .map(role -> role.getAuthority())
-        .collect(Collectors.toList());
 
     // Se for um profissional, adiciona campos específicos
     if (entity instanceof Professional professional) {
@@ -79,14 +73,6 @@ public class UserMeDTO {
 
   public void setBirthDate(LocalDate birthDate) {
     this.birthDate = birthDate;
-  }
-
-  public List<String> getRoles() {
-    return roles;
-  }
-
-  public void setRoles(List<String> roles) {
-    this.roles = roles;
   }
 
   public String getSlug() {

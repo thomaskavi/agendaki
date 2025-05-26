@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Past;
 
 public class UserUpdateDTO {
 
-  private Long id;
   private String name;
   private String phone;
   @Past(message = "Verifique a data de nascimento e tente novamente")
@@ -18,14 +17,9 @@ public class UserUpdateDTO {
   }
 
   public UserUpdateDTO(User entity) {
-    id = entity.getId();
     name = entity.getName();
     phone = entity.getPhone();
     birthDate = entity.getBirthDate();
-  }
-
-  public Long getId() {
-    return id;
   }
 
   public String getName() {

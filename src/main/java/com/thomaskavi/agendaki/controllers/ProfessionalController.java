@@ -50,7 +50,7 @@ public class ProfessionalController {
   @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
   @PostMapping("/admin")
   public ResponseEntity<ProfessionalDTO> adminInsert(@Valid @RequestBody ProfessionalSignupDTO dto) {
-    ProfessionalDTO professional = service.createProfessional(dto);
+    ProfessionalDTO professional = service.adminInsert(dto);
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
         .buildAndExpand(professional.getId()).toUri();
     return ResponseEntity.created(uri).body(professional);

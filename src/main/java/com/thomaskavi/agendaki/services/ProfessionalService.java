@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.thomaskavi.agendaki.dto.ProfessionalDTO;
 import com.thomaskavi.agendaki.dto.ProfessionalDetailsDTO;
+import com.thomaskavi.agendaki.dto.ProfessionalInsertResponseDTO;
 import com.thomaskavi.agendaki.dto.ProfessionalPublicDTO;
 import com.thomaskavi.agendaki.dto.ProfessionalSignupDTO;
 import com.thomaskavi.agendaki.dto.ProfessionalUpdateDTO;
@@ -56,7 +57,32 @@ public class ProfessionalService {
   }
 
   @Transactional
-  public ProfessionalDTO createProfessional(ProfessionalSignupDTO dto) {
+  public ProfessionalInsertResponseDTO createProfessional(ProfessionalSignupDTO dto) {
+    try {
+      if (repository.findByEmail(dto.getEmail()).isPresent()) {
+        throw new DatabaseException("Email já está em uso");
+      }
+
+      Professional entity = new Professional();
+      copySignupDtoToEntity(dto, entity);
+      entity.setPassword(passwordEncoder.encode(dto.getPassword()));
+
+      Role role = roleRepository.findByAuthority("ROLE_PROFESSIONAL")
+          .orElseThrow(() -> new ResourceNotFoundException("Role 'ROLE_PROFESSIONAL' não encontrada"));
+      entity.getRoles().add(role);
+
+      entity = repository.save(entity);
+      return new ProfessionalInsertResponseDTO(entity);
+    } catch (DataIntegrityViolationException e) {
+      if (e.getMessage() != null && e.getMessage().toLowerCase().contains("slug")) {
+        throw new DatabaseException("Slug já está em uso", e);
+      }
+      throw new DatabaseException("Erro de integridade de dados", e);
+    }
+  }
+
+  @Transactional
+  public ProfessionalDTO adminInsert(ProfessionalSignupDTO dto) {
     try {
       if (repository.findByEmail(dto.getEmail()).isPresent()) {
         throw new DatabaseException("Email já está em uso");
@@ -154,7 +180,7 @@ public class ProfessionalService {
   private void copyDtoToEntity(ProfessionalUpdateDTO dto, Professional entity) {
     if (dto.getName() != null) {
       entity.setName(dto.getName());
-    } 
+    }
     if (dto.getPhone() != null) {
       entity.setPhone(dto.getPhone());
     }

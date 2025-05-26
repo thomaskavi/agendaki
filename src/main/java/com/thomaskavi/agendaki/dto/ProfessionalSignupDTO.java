@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 public class ProfessionalSignupDTO extends UserSignupDTO { // Estende UserSignupDTO
 
   @NotBlank(message = "Slug é obrigatório")
-  @Size(min = 3, max = 50, message = "Slug deve ter entre 3 e 50 caracteres")
+  @Size(min = 3, max = 25, message = "Slug deve ter entre 3 e 25 caracteres")
   private String slug;
 
   @NotBlank(message = "Profissão é obrigatória")
