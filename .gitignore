@@ -4,6 +4,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# .gitignore
+src/main/resources/application-test.properties
+
 ### STS ###
 .apt_generated
 .classpath

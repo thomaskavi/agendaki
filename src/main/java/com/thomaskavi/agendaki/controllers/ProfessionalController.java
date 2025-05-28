@@ -32,7 +32,7 @@ public class ProfessionalController {
   @Autowired
   private ProfessionalService service;
 
-  @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+  @PreAuthorize("isAuthenticated()")
   @GetMapping
   public ResponseEntity<List<ProfessionalDetailsDTO>> findAll() {
     List<ProfessionalDetailsDTO> list = service.findAll();

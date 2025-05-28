@@ -18,5 +18,40 @@
     "name": "cors.origins",
     "type": "java.lang.String",
     "description": "A description for 'cors.origins'"
+  },
+  {
+    "name": "security.jwt.key-password",
+    "type": "java.lang.String",
+    "description": "A description for 'security.jwt.key-password'"
+  },
+  {
+    "name": "security.jwt.key-password",
+    "type": "java.lang.String",
+    "description": "A description for 'security.jwt.key-password'"
+  },
+  {
+    "name": "security.jwt.key-store-path",
+    "type": "java.lang.String",
+    "description": "A description for 'security.jwt.key-store-path'"
+  },
+  {
+    "name": "security.jwt.key-store-password",
+    "type": "java.lang.String",
+    "description": "A description for 'security.jwt.key-store-password'"
+  },
+  {
+    "name": "security.jwt.key-alias",
+    "type": "java.lang.String",
+    "description": "A description for 'security.jwt.key-alias'"
+  },
+  {
+    "name": "spring.security.oauth2.authorizationserver.jwt.key-store-type",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.security.oauth2.authorizationserver.jwt.key-store-type'"
+  },
+  {
+    "name": "agendaki.auth-server-url",
+    "type": "java.lang.String",
+    "description": "A description for 'agendaki.auth-server-url'"
   }
 ]}
