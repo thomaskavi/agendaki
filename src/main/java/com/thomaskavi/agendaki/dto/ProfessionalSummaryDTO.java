@@ -8,7 +8,6 @@ public class ProfessionalSummaryDTO {
   private String name;
   private String email;
   private String profession;
-  private String profileImageUrl;
 
   public ProfessionalSummaryDTO() {
   }
@@ -18,7 +17,7 @@ public class ProfessionalSummaryDTO {
     this.name = entity.getName();
     this.email = entity.getEmail();
     this.profession = entity.getProfession();
-    this.profileImageUrl = entity.getProfileImageUrl();
+
   }
 
   public Long getId() {
@@ -37,7 +36,4 @@ public class ProfessionalSummaryDTO {
     return profession;
   }
 
-  public String getProfileImageUrl() {
-    return profileImageUrl;
-  }
 }

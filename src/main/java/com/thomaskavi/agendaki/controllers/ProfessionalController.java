@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.thomaskavi.agendaki.dto.ProfessionalDTO;
@@ -21,6 +23,7 @@ import com.thomaskavi.agendaki.dto.ProfessionalDetailsDTO;
 import com.thomaskavi.agendaki.dto.ProfessionalPublicDTO;
 import com.thomaskavi.agendaki.dto.ProfessionalSignupDTO;
 import com.thomaskavi.agendaki.dto.ProfessionalUpdateDTO;
+import com.thomaskavi.agendaki.dto.UriDTO;
 import com.thomaskavi.agendaki.services.ProfessionalService;
 
 import jakarta.validation.Valid;
@@ -76,6 +79,13 @@ public class ProfessionalController {
   public ResponseEntity<ProfessionalPublicDTO> findBySlug(@PathVariable String slug) {
     ProfessionalPublicDTO dto = service.findBySlug(slug);
     return ResponseEntity.ok(dto);
+  }
+
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSIONAL')")
+  @PostMapping(value = "/send-image")
+  public ResponseEntity<UriDTO> uploadImage(@RequestParam("file") MultipartFile file) {
+    UriDTO dto = service.uploadProfileImage(file);
+    return ResponseEntity.ok().body(dto);
   }
 
 }

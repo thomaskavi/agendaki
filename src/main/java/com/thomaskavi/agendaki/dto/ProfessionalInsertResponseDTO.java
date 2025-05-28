@@ -18,7 +18,6 @@ public class ProfessionalInsertResponseDTO {
   private LocalDate birthDate;
   private String slug;
   private String profession;
-  private String profileImageUrl;
 
   public ProfessionalInsertResponseDTO() {
   }
@@ -31,7 +30,7 @@ public class ProfessionalInsertResponseDTO {
     birthDate = entity.getBirthDate();
     slug = entity.getSlug();
     profession = entity.getProfession();
-    profileImageUrl = entity.getProfileImageUrl();
+
   }
 
 }

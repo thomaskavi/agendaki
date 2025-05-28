@@ -1,5 +1,6 @@
 package com.thomaskavi.agendaki.services;
 
+import java.net.URL;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.thomaskavi.agendaki.dto.ProfessionalDTO;
 import com.thomaskavi.agendaki.dto.ProfessionalDetailsDTO;
@@ -19,6 +21,7 @@ import com.thomaskavi.agendaki.dto.ProfessionalInsertResponseDTO;
 import com.thomaskavi.agendaki.dto.ProfessionalPublicDTO;
 import com.thomaskavi.agendaki.dto.ProfessionalSignupDTO;
 import com.thomaskavi.agendaki.dto.ProfessionalUpdateDTO;
+import com.thomaskavi.agendaki.dto.UriDTO;
 import com.thomaskavi.agendaki.entities.Professional;
 import com.thomaskavi.agendaki.entities.Role;
 import com.thomaskavi.agendaki.repository.ProfessionalRepository;
@@ -36,6 +39,9 @@ public class ProfessionalService {
 
   @Autowired
   private PasswordEncoder passwordEncoder;
+
+  @Autowired
+  private S3Service s3Service;
 
   @Autowired
   private RoleRepository roleRepository;
@@ -118,7 +124,7 @@ public class ProfessionalService {
     // Campos específicos de ProfessionalSignupDTO
     entity.setSlug(dto.getSlug());
     entity.setProfession(dto.getProfession());
-    entity.setProfileImageUrl(dto.getProfileImageUrl());
+
     // Lembre-se: O campo 'services' não vem no DTO de signup, ele é preenchido
     // depois
   }
@@ -196,6 +202,18 @@ public class ProfessionalService {
     if (dto.getProfileImageUrl() != null) {
       entity.setProfileImageUrl(dto.getProfileImageUrl());
     }
+  }
+
+  @Transactional
+  public UriDTO uploadProfileImage(MultipartFile file) {
+    Professional professional = authenticated(); // Busca o profissional logado
+
+    URL url = s3Service.uploadFile(file, professional.getName()); // Usa o nome do profissional no nome do arquivo
+
+    professional.setProfileImageUrl(url.toString()); // Atualiza a URL no banco
+    repository.save(professional);
+
+    return new UriDTO(url.toString()); // Retorna para o controller
   }
 
 }

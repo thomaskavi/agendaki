@@ -12,8 +12,6 @@ public class ProfessionalSignupDTO extends UserSignupDTO { // Estende UserSignup
   @NotBlank(message = "Profissão é obrigatória")
   private String profession;
 
-  private String profileImageUrl; // Não @NotBlank se for opcional
-
   public ProfessionalSignupDTO() {
     super();
   }
@@ -35,11 +33,4 @@ public class ProfessionalSignupDTO extends UserSignupDTO { // Estende UserSignup
     this.profession = profession;
   }
 
-  public String getProfileImageUrl() {
-    return profileImageUrl;
-  }
-
-  public void setProfileImageUrl(String profileImageUrl) {
-    this.profileImageUrl = profileImageUrl;
-  }
 }
