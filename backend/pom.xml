@@ -131,6 +131,38 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>Add commentMore actions
+				<version>0.8.7</version>
+				<configuration>
+					<excludes>
+						<exclude>com/thomaskavi/agendaki/AgendakiApplication.class</exclude>
+						<exclude>com/thomaskavi/agendaki/config/**</exclude>
+						<exclude>com/thomaskavi/agendaki/entities/**</exclude>
+						<exclude>com/thomaskavi/agendaki/dto/**</exclude>
+						<exclude>com/thomaskavi/agendaki/controllers/handlers/**</exclude>
+						<exclude>com/thomaskavi/agendaki/services/exceptions/**</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>jacoco-report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/jacoco-report</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
