@@ -3,6 +3,7 @@ package com.thomaskavi.agendaki.dto;
 import java.time.LocalDate;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -23,6 +24,7 @@ public class UserSignupDTO {
   @NotBlank(message = "Telefone é obrigatório")
   private String phone;
 
+  @Future(message = "Informe uma data válida")
   private LocalDate birthDate;
 
   public UserSignupDTO() {
