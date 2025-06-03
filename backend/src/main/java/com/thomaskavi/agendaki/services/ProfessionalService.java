@@ -1,10 +1,11 @@
 package com.thomaskavi.agendaki.services;
 
 import java.net.URL;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -50,9 +51,9 @@ public class ProfessionalService {
   private ProfessionalRepository repository;
 
   @Transactional(readOnly = true)
-  public List<ProfessionalDetailsDTO> findAll() {
-    List<Professional> result = repository.findAll();
-    return result.stream().map(x -> new ProfessionalDetailsDTO(x)).toList();
+  public Page<ProfessionalDetailsDTO> findAll(Pageable pageable) {
+    Page<Professional> page = repository.findAll(pageable);
+    return page.map(ProfessionalDetailsDTO::new);
   }
 
   @Transactional(readOnly = true)

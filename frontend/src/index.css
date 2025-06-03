@@ -1,5 +1,60 @@
-*{
+/* src/index.css */
+:root {
+  --primary-color: #007bff;
+  --primary-color-dark: #0056b3;
+  --background-dark: #121212;
+  --surface-dark: #1e1e1e;
+  --on-surface-dark: #e0e0e0;
+  --on-surface-dark-secondary: #a0a0a0;
+  --input-background-dark: #2c2c2c;
+  --border-dark: #333;
+  --error-color: #dc3545;
+
+  --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+* {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family-sans-serif);
+  background-color: var(--background-dark);
+  color: var(--on-surface-dark);
+  line-height: 1.6;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--primary-color-dark);
+  text-decoration: underline;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Estilos globais para inputs e botões podem ser adicionados aqui se necessário,
+   mas os styles.module.css darão mais controle por componente. */
+
+/* Helper para visualmente oculto, mas acessível */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

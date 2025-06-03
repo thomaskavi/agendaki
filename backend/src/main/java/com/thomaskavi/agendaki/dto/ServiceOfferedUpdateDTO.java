@@ -4,7 +4,15 @@ import com.thomaskavi.agendaki.entities.ServiceOffered;
 
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ServiceOfferedUpdateDTO {
 
   private Long id;
@@ -15,13 +23,10 @@ public class ServiceOfferedUpdateDTO {
   @Size(min = 10, max = 100, message = "Descrição deve ter entre 10 e 100 caracteres")
   private String description;
 
-  @PositiveOrZero
+  @PositiveOrZero(message = "Preço não pode ser negativo")
   private Double price;
 
   private Integer durationInMinutes;
-
-  public ServiceOfferedUpdateDTO() {
-  }
 
   public ServiceOfferedUpdateDTO(ServiceOffered entity) {
     this.id = entity.getId();
@@ -29,45 +34,5 @@ public class ServiceOfferedUpdateDTO {
     this.description = entity.getDescription();
     this.price = entity.getPrice();
     this.durationInMinutes = entity.getDurationInMinutes();
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public Double getPrice() {
-    return price;
-  }
-
-  public void setPrice(Double price) {
-    this.price = price;
-  }
-
-  public Integer getDurationInMinutes() {
-    return durationInMinutes;
-  }
-
-  public void setDurationInMinutes(Integer durationInMinutes) {
-    this.durationInMinutes = durationInMinutes;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
   }
 }

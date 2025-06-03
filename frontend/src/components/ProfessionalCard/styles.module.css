@@ -1,0 +1,87 @@
+/* src/components/ProfessionalCard/styles.module.css */
+.card {
+  background-color: var(--surface-dark);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+.profileImage {
+  width: 50vw;
+  height: 300px; /* Altura fixa para a imagem */
+  object-fit: cover; /* Garante que a imagem cubra a área sem distorcer */
+  border-bottom: 1px solid var(--border-dark);
+}
+
+.cardContent {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex-grow: 1; /* Faz o conteúdo crescer para preencher o card */
+}
+
+.name {
+  font-size: 1.4rem;
+  color: var(--on-surface-dark);
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.profession {
+  font-size: 1rem;
+  color: var(--primary-color); /* Destaque para a profissão */
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.contact {
+  font-size: 0.9rem;
+  color: var(--on-surface-dark-secondary);
+}
+
+.contact a {
+  color: var(--on-surface-dark-secondary);
+  text-decoration: none;
+}
+.contact a:hover {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+
+.profileLink {
+  display: inline-block;
+  margin-top: auto; /* Empurra o link para o final do card */
+  padding: 0.6rem 1rem;
+  background-color: var(--primary-color);
+  color: white;
+  text-align: center;
+  border-radius: 6px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.profileLink:hover {
+  background-color: var(--primary-color-dark);
+  color: white; /* Manter a cor do texto branca no hover */
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .name {
+    font-size: 1.2rem;
+  }
+  .profession {
+    font-size: 0.9rem;
+  }
+}
+

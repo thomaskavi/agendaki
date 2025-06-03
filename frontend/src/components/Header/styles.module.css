@@ -1,0 +1,92 @@
+/* src/components/Header/styles.module.css */
+.header {
+  background-color: var(--surface-dark);
+  padding: 1rem 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.logo:hover {
+  color: var(--primary-color-dark);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navLink {
+  color: var(--on-surface-dark);
+  text-decoration: none;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  font-size: 1rem;
+}
+
+.navLink:hover,
+.navLink.active { /* Para indicar link ativo com React Router NavLink */
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--on-surface-dark);
+}
+
+.navButton {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.navButton:hover {
+  background-color: var(--primary-color-dark);
+  color: white;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .nav {
+    margin-top: 0.5rem;
+    width: 100%;
+    justify-content: center; /* Centraliza os links no mobile */
+    flex-wrap: wrap; /* Permite que os links quebrem linha se necessário */
+  }
+
+  .navLink {
+    padding: 0.6rem 0.5rem; /* Ajuste para toque */
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    font-size: 1.5rem;
+  }
+  .nav {
+    gap: 0.5rem; /* Reduz o gap entre os links */
+  }
+}

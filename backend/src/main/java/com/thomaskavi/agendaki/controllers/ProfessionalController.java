@@ -1,9 +1,10 @@
 package com.thomaskavi.agendaki.controllers;
 
 import java.net.URI;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,14 +36,13 @@ public class ProfessionalController {
   @Autowired
   private ProfessionalService service;
 
-  @PreAuthorize("isAuthenticated()")
+  // Ex: GET /professionals?page=0&size=5&sort=name,asc
   @GetMapping
-  public ResponseEntity<List<ProfessionalDetailsDTO>> findAll() {
-    List<ProfessionalDetailsDTO> list = service.findAll();
-    return ResponseEntity.ok(list);
+  public ResponseEntity<Page<ProfessionalDetailsDTO>> findAll(Pageable pageable) {
+    Page<ProfessionalDetailsDTO> page = service.findAll(pageable);
+    return ResponseEntity.ok(page);
   }
 
-  @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
   @GetMapping("/{id}")
   public ResponseEntity<ProfessionalDetailsDTO> findById(@PathVariable Long id) {
     ProfessionalDetailsDTO dto = service.findById(id);

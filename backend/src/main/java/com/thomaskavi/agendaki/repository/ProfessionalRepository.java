@@ -3,6 +3,8 @@ package com.thomaskavi.agendaki.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,6 +26,8 @@ public interface ProfessionalRepository extends JpaRepository<Professional, Long
   List<ProfessionalDetailsProjection> searchProfessionalAndRolesByEmail(String email);
 
   Optional<Professional> findByEmail(String email);
+
+  Page<Professional> findAll(Pageable pageable);
 
   @Query("SELECT p FROM Professional p LEFT JOIN FETCH p.services WHERE p.slug = :slug")
   Optional<Professional> findBySlug(@Param("slug") String slug);

@@ -4,12 +4,15 @@ import java.time.LocalDate;
 
 import com.thomaskavi.agendaki.entities.Professional;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProfessionalInsertResponseDTO {
 
   private String name;
@@ -19,18 +22,12 @@ public class ProfessionalInsertResponseDTO {
   private String slug;
   private String profession;
 
-  public ProfessionalInsertResponseDTO() {
-  }
-
-  // Construtor baseado na entidade
   public ProfessionalInsertResponseDTO(Professional entity) {
-    name = entity.getName();
-    email = entity.getEmail();
-    phone = entity.getPhone();
-    birthDate = entity.getBirthDate();
-    slug = entity.getSlug();
-    profession = entity.getProfession();
-
+    this.name = entity.getName();
+    this.email = entity.getEmail();
+    this.phone = entity.getPhone();
+    this.birthDate = entity.getBirthDate();
+    this.slug = entity.getSlug();
+    this.profession = entity.getProfession();
   }
-
 }

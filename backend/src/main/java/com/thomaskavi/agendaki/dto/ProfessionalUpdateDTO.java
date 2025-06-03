@@ -4,11 +4,22 @@ import java.time.LocalDate;
 
 import com.thomaskavi.agendaki.entities.Professional;
 
+import jakarta.validation.constraints.Past;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProfessionalUpdateDTO {
 
   private String name;
-
   private String phone;
+
+  @Past(message = "Verifique a data de nascimento e tente novamente")
   private LocalDate birthDate;
 
   private String slug;
@@ -17,63 +28,12 @@ public class ProfessionalUpdateDTO {
 
   private String profileImageUrl;
 
-  public ProfessionalUpdateDTO() {
-  }
-
   public ProfessionalUpdateDTO(Professional entity) {
-    name = entity.getName();
-    phone = entity.getPhone();
-    birthDate = entity.getBirthDate();
-    slug = entity.getSlug();
-    profession = entity.getProfession();
-    profileImageUrl = entity.getProfileImageUrl();
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public String getPhone() {
-    return phone;
-  }
-
-  public void setPhone(String phone) {
-    this.phone = phone;
-  }
-
-  public LocalDate getBirthDate() {
-    return birthDate;
-  }
-
-  public void setBirthDate(LocalDate birthDate) {
-    this.birthDate = birthDate;
-  }
-
-  public String getSlug() {
-    return slug;
-  }
-
-  public void setSlug(String slug) {
-    this.slug = slug;
-  }
-
-  public String getProfession() {
-    return profession;
-  }
-
-  public void setProfession(String profession) {
-    this.profession = profession;
-  }
-
-  public String getProfileImageUrl() {
-    return profileImageUrl;
-  }
-
-  public void setProfileImageUrl(String profileImageUrl) {
-    this.profileImageUrl = profileImageUrl;
+    this.name = entity.getName();
+    this.phone = entity.getPhone();
+    this.birthDate = entity.getBirthDate();
+    this.slug = entity.getSlug();
+    this.profession = entity.getProfession();
+    this.profileImageUrl = entity.getProfileImageUrl();
   }
 }

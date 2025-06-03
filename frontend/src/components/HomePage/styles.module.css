@@ -1,0 +1,59 @@
+/* src/components/HomePage/styles.module.css */
+.homeContainer {
+  width: 90%;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.title {
+  font-size: 2rem;
+  color: var(--on-surface-dark);
+  margin-bottom: 2rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.professionalsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Responsivo */
+  gap: 2rem;
+}
+
+.statusMessage {
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--on-surface-dark-secondary);
+  padding: 2rem;
+}
+
+.error {
+  color: var(--error-color);
+}
+
+
+@media (max-width: 768px) {
+  .homeContainer {
+    width: 95%;
+    margin: 1.5rem auto;
+  }
+  .title {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+  .professionalsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.6rem;
+  }
+  .professionalsGrid {
+    /* Para telas muito pequenas, pode ser melhor uma coluna */
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}

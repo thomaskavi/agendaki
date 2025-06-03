@@ -2,8 +2,16 @@ package com.thomaskavi.agendaki.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-public class ProfessionalSignupDTO extends UserSignupDTO { // Estende UserSignupDTO
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class ProfessionalSignupDTO extends UserSignupDTO {
 
   @NotBlank(message = "Slug é obrigatório")
   @Size(min = 3, max = 25, message = "Slug deve ter entre 3 e 25 caracteres")
@@ -11,26 +19,4 @@ public class ProfessionalSignupDTO extends UserSignupDTO { // Estende UserSignup
 
   @NotBlank(message = "Profissão é obrigatória")
   private String profession;
-
-  public ProfessionalSignupDTO() {
-    super();
-  }
-
-  // --- Getters e Setters ---
-  public String getSlug() {
-    return slug;
-  }
-
-  public void setSlug(String slug) {
-    this.slug = slug;
-  }
-
-  public String getProfession() {
-    return profession;
-  }
-
-  public void setProfession(String profession) {
-    this.profession = profession;
-  }
-
 }

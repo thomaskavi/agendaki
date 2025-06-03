@@ -1,0 +1,230 @@
+/* src/components/ScheduleAppointmentPage/styles.module.css */
+
+.scheduleContainer {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #2c2c2c;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  color: #e0e0e0;
+}
+
+.title {
+  color: #007bff;
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2.2rem;
+}
+
+.statusMessage {
+  text-align: center;
+  padding: 20px;
+  font-size: 1.1rem;
+}
+
+.statusMessage.error {
+  color: #dc3545;
+  background-color: #3a1c1c;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  border: 1px solid #dc3545;
+}
+
+.successMessage {
+  color: #28a745;
+  background-color: #203a20;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid #28a745;
+  text-align: center;
+  font-weight: bold;
+}
+
+.serviceSelection,
+.dateSelection,
+.slotsSelection {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #343434;
+  border-radius: 6px;
+  border-left: 5px solid #007bff;
+}
+
+.serviceSelection h2,
+.dateSelection h2,
+.slotsSelection h2 {
+  color: #007bff;
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.6rem;
+}
+
+.selectedServiceCard {
+    background-color: #444;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #007bff;
+}
+
+.selectedServiceCard h3 {
+    margin-top: 0;
+    color: #e0e0e0;
+    font-size: 1.3rem;
+}
+
+.selectedServiceCard p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #ccc;
+}
+
+.otherServices h3 {
+    margin-top: 20px;
+    margin-bottom: 15px;
+    color: #e0e0e0;
+    font-size: 1.4rem;
+}
+
+.servicesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.serviceOptionButton {
+    background-color: #555;
+    color: #fff;
+    border: 1px solid #666;
+    border-radius: 5px;
+    padding: 12px 18px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    width: 100%;
+    text-align: left;
+}
+
+.serviceOptionButton:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.serviceOptionButton.selected {
+    background-color: #007bff;
+    border-color: #007bff;
+    font-weight: bold;
+}
+
+.serviceOptionButton:disabled {
+  background-color: #333;
+  color: #777;
+  border-color: #444;
+  cursor: not-allowed;
+}
+
+/* Estilizando o DatePicker */
+.datePickerInput {
+  width: 100%;
+  padding: 12px;
+  border-radius: 5px;
+  border: 1px solid #555;
+  background-color: #444;
+  color: #e0e0e0;
+  font-size: 1rem;
+  box-sizing: border-box; /* Garante que padding e border estão incluídos na largura */
+}
+
+/* Para o calendário do datepicker em si, você pode precisar de mais CSS global ou overrides */
+.react-datepicker {
+  background-color: #343434;
+  border: 1px solid #555;
+  font-family: Arial, sans-serif;
+  color: #e0e0e0;
+}
+
+.react-datepicker__header {
+  background-color: #444;
+  border-bottom: 1px solid #555;
+}
+
+.react-datepicker__current-month,
+.react-datepicker__day-name {
+  color: #e0e0e0;
+}
+
+.react-datepicker__day {
+  color: #e0e0e0;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background-color: #007bff;
+  color: white;
+}
+
+.react-datepicker__day--outside-month {
+  color: #888;
+}
+
+.slotsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.slotButton {
+  background-color: #444;
+  color: #e0e0e0;
+  border: 1px solid #555;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.slotButton:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+.slotButton.selected {
+  background-color: #007bff;
+  border-color: #007bff;
+  font-weight: bold;
+}
+
+.slotButton:disabled {
+  background-color: #333;
+  color: #777;
+  border-color: #444;
+  cursor: not-allowed;
+}
+
+.actionButtons {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.confirmButton {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.confirmButton:hover {
+  background-color: #218838;
+}
+
+.confirmButton:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}

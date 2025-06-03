@@ -18,8 +18,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CreateAvailableSlotDTO {
 
-  private Long id;
-
   @FutureOrPresent(message = "A data e hora de início não pode ser no passado.")
   private LocalDateTime startTime;
 
@@ -28,9 +26,9 @@ public class CreateAvailableSlotDTO {
   private boolean isBooked;
 
   public CreateAvailableSlotDTO(AvailableSlot entity) {
-    id = entity.getId();
-    startTime = entity.getStartTime();
-    endTime = entity.getEndTime();
-    isBooked = entity.isBooked();
+    this.startTime = entity.getStartTime();
+    this.endTime = entity.getEndTime();
+    this.isBooked = entity.isBooked();
   }
+
 }

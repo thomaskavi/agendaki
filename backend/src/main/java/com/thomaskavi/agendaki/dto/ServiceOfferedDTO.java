@@ -6,7 +6,15 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ServiceOfferedDTO {
 
   private Long id;
@@ -20,13 +28,10 @@ public class ServiceOfferedDTO {
   private String description;
 
   @NotNull(message = "O preço é obrigatório")
-  @PositiveOrZero
+  @PositiveOrZero(message = "Preço não pode ser negativo")
   private Double price;
 
   private Integer durationInMinutes;
-
-  public ServiceOfferedDTO() {
-  }
 
   public ServiceOfferedDTO(ServiceOffered entity) {
     this.id = entity.getId();
@@ -35,45 +40,4 @@ public class ServiceOfferedDTO {
     this.price = entity.getPrice();
     this.durationInMinutes = entity.getDurationInMinutes();
   }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public Double getPrice() {
-    return price;
-  }
-
-  public void setPrice(Double price) {
-    this.price = price;
-  }
-
-  public Integer getDurationInMinutes() {
-    return durationInMinutes;
-  }
-
-  public void setDurationInMinutes(Integer durationInMinutes) {
-    this.durationInMinutes = durationInMinutes;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
 }

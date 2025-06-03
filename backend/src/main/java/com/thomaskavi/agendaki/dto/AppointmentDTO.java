@@ -7,9 +7,13 @@ import com.thomaskavi.agendaki.enums.AppointmentStatus;
 
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class AppointmentDTO {
 
   private Long id;
@@ -35,9 +39,6 @@ public class AppointmentDTO {
   private String serviceOfferedName;
   private Double servicePrice;
   private AppointmentStatus status;
-
-  public AppointmentDTO() {
-  }
 
   public AppointmentDTO(Appointment entity) {
     this.id = entity.getId();
